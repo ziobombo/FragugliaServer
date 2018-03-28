@@ -1,0 +1,11 @@
+- hosts: server0
+  remote_user: root
+  become: yes
+  become_method: sudo
+  roles:
+  - common
+  - docker
+#    - transmission
+#    - sickrage
+#    - plex
+#    - nginx

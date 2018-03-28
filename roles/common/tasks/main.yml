@@ -1,0 +1,65 @@
+- name: Apt keys
+  apt_key: url={{item}} state=present
+  with_items:
+    - https://download.docker.com/linux/ubuntu/gpg
+
+- name: Apt repos 
+  apt_repository: repo={{item}} state=present
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+   
+- name: Unwanted packages
+  apt: name={{item}} state=absent update_cache=yes purge=yes
+  with_items:
+    - docker
+    - docker-engine
+    - docker.io
+
+- name: Base packages
+  apt: name={{item}} state=latest update_cache=yes
+  with_items:
+    - vim
+    - aptitude
+    - apt-transport-https 
+    - ca-certificates 
+    - curl 
+    - software-properties-common
+    - docker-ce
+    - htop
+    - python-pip
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: docker-py (pip)
+  pip:
+    name: "{{item}}"
+  with_items:
+    - docker-py
+    - docker-compose
+
+- name: Ensure group "server0" exists
+  group:
+    name: server0
+    state: present
+    gid: 20000
+
+- name: Ensure user "server0" exists
+  user:
+    name: server0
+    uid: 20000
+    group: server0
+    home: /home/server0
+    password: "{{ server0_password }}"
+
+- name: Variables in sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { name: 'net.core.rmem_max', value: '4194394' }
+    - { name: 'net.core.wmem_max', value: '1048576' }
+

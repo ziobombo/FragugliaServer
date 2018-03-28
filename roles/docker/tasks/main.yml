@@ -1,0 +1,5 @@
+- name: Docker images
+  docker_service:
+    project_src: fragugliaserver_docker
+    pull: yes
+    restarted: yes
