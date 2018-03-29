@@ -36,8 +36,10 @@
 - name: docker-py (pip)
   pip:
     name: "{{item}}"
+    state: latest
   with_items:
-    - docker-py
+    - pip
+    - docker
     - docker-compose
 
 - name: Ensure group "server0" exists

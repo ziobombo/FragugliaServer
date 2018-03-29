@@ -1,5 +1,72 @@
 - name: Docker images
   docker_service:
-    project_src: fragugliaserver_docker
+    project_name: fragugliaserver
     pull: yes
     restarted: yes
+    definition:
+      version: '3.6'
+      services:
+        sickrage:
+          container_name: sickrage
+          image: linuxserver/sickrage:latest
+          volumes:
+            - /home/server0/configuration/SickRage:/config
+            - /home/server0/temp/sr_downloads:/downloads
+            - /home/server0/data/tvshows:/tv
+          environment:
+            - PGID=20000
+            - PUID=20000
+            - TZ=Europe/Paris
+          ports:
+            - "8081:8081"
+          links:
+            - transmission
+            - nginx
+        transmission:
+          container_name: transmission
+          image: linuxserver/transmission:latest
+          volumes:
+            - /home/server0/configuration/Transmission:/config
+            - /home/server0/temp/t_downloads:/downloads
+          environment:
+            - PGID=20000
+            - PUID=20000
+            - TZ=Europe/Paris
+          ports:
+            - "9091:9091"
+            - "51413:51413"
+            - "51413:51413/udp"
+          links:
+            - nginx
+        plex:
+          container_name: plex
+          image: linuxserver/plex:latest
+          volumes:
+            - /home/server0/configuration/Plex:/config
+            - /home/server0/data/tvshows:/data/tvshows
+            - /home/server0/data/movies:/data/movies
+            - /home/server0/temp/p_transcode:/transcode
+          environment:
+            - PGID=20000
+            - PUID=20000
+            - TZ=Europe/Paris
+            - VERSION=latest
+          ports:
+            - "32400:32400"
+            - "32400:32400/udp"
+            - "32469:32469/udp"
+            - "32469:32469"
+            - "5353:5353/udp"
+            - "1900:1900/udp"
+        nginx:
+          container_name: nginx
+          image: linuxserver/nginx:latest
+          volumes:
+            - /home/server0/configuration/Nginx:/config
+          environment:
+            - PGID=20000
+            - PUID=20000
+            - TZ=Europe/Paris
+          ports:
+            - "80:80"
+            - "443:443"
