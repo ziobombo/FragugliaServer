@@ -1,15 +1,15 @@
 - name: Setup nginx vhosts
   template:
-    src=site.j2
+    src={{ item.template_name }}.j2
     dest=/home/server0/configuration/Nginx/nginx/site-confs/{{ server_name }}.conf
   vars:
     server_name: "{{ item.server_name }}"
     proxy_pass: "{{ item.proxy_pass }}"
     auth: "{{ item.auth }}"
   loop: 
-    - { server_name: 'sickrage.fraguglia.it', proxy_pass: 'http://195.154.77.88:8081', auth: 'true' }
-    - { server_name: 'transmission.fraguglia.it', proxy_pass: 'http://195.154.77.88:9091', auth: 'true' }
-    - { server_name: 'plex.fraguglia.it', proxy_pass: 'http://195.154.77.88:32400', auth: 'false' }
+    - { template_name: 'site', server_name: 'sickrage.fraguglia.it', proxy_pass: 'http://195.154.77.88:8081', auth: 'true' }
+    - { template_name: 'site', server_name: 'transmission.fraguglia.it', proxy_pass: 'http://195.154.77.88:9091', auth: 'true' }
+    - { template_name: 'plex', server_name: 'plex.fraguglia.it', proxy_pass: 'http://195.154.77.88:32400', auth: 'false' }
 
 - name: Absent default file
   file:
