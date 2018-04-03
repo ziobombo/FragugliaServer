@@ -27,6 +27,7 @@
     - docker-ce
     - htop
     - python-pip
+    - python-passlib
 
 - name: Update all packages to the latest version
   apt:

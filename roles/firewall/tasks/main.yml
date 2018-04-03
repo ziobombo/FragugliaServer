@@ -1,0 +1,8 @@
+- ufw:
+    state: enabled
+    policy: allow
+
+- ufw:
+    rule: deny
+    port: 8081
+    direction: in

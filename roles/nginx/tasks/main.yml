@@ -1,7 +1,11 @@
-- name: Setup nginx vhosts
+- name: Install nginx
+  include_role:
+    name: nginxinc.nginx
+
+- name: Setup sites vhosts
   template:
     src={{ item.template_name }}.j2
-    dest=/home/server0/configuration/Nginx/nginx/site-confs/{{ server_name }}.conf
+    dest=/etc/nginx/conf.d/{{ server_name }}.conf
   vars:
     server_name: "{{ item.server_name }}"
     proxy_pass: "{{ item.proxy_pass }}"
@@ -9,15 +13,52 @@
   loop: 
     - { template_name: 'site', server_name: 'sickrage.fraguglia.it', proxy_pass: 'http://195.154.77.88:8081', auth: 'true' }
     - { template_name: 'site', server_name: 'transmission.fraguglia.it', proxy_pass: 'http://195.154.77.88:9091', auth: 'true' }
-    - { template_name: 'plex', server_name: 'plex.fraguglia.it', proxy_pass: 'http://195.154.77.88:32400', auth: 'false' }
+
+- name: Setup plex vhost
+  template:
+    src=plex.j2
+    dest=/etc/nginx/conf.d/plex.fraguglia.it.conf
 
 - name: Absent default file
   file:
-    path: /home/server0/configuration/Nginx/nginx/site-confs/default
+    path: /etc/nginx/conf.d/default.conf
     state: absent
 
-- name: Restart nginx
-  docker_container:
+- htpasswd:
+    path: /etc/nginx/passwdfile
+    name: server0
+    password: "{{ server0_password }}"
+    owner: nginx
+    group: nginx
+    mode: 0640
+
+- openssl_dhparam:
+    path: /etc/ssl/dhparams.pem
+    size: 2048
+
+- name: Generate certificates
+  include_role:
+    name: geerlingguy.certbot
+  vars:
+    certbot_auto_renew: true
+    certbot_auto_renew_user: "root"
+    certbot_auto_renew_hour: 3
+    certbot_auto_renew_minute: 30
+    certbot_auto_renew_options: "--quiet --no-self-upgrade"
+    certbot_create_if_missing: yes
+    certbot_create_method: standalone
+    certbot_certs:
+      - domains:
+        - transmission.fraguglia.it
+        - sickrage.fraguglia.it
+        - plex.fraguglia.it
+    certbot_admin_email: riccardo.casazza@gmail.com
+    certbot_create_standalone_stop_service: 
+      - nginx
+    certbot_create_command: "{{ certbot_script }} certonly --standalone --staging --noninteractive --agree-tos --expand --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
+
+- name: Start service nginx, if not running
+  service:
     name: nginx
     state: started
-    restart: yes
+

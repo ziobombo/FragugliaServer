@@ -2,10 +2,12 @@
   remote_user: root
   become: yes
   become_method: sudo
+
   roles:
-  - common
-  - docker
-#    - transmission
+    - common
+    - docker
+    - transmission
 #    - sickrage
 #    - plex
-  - nginx
+    - nginx
+    - firewall

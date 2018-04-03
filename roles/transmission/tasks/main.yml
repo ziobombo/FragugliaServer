@@ -1,0 +1,14 @@
+- name: Stop Transmission container
+  docker_container:
+    name: transmission
+    state: stopped
+
+- name: Update Transmission configuration
+  ghetto_json:
+    path: /home/server0/configuration/Transmission/settings.json
+    cache-size-mb: 512
+
+- name: Start Transmission container
+  docker_container:
+    name: transmission
+    state: started
