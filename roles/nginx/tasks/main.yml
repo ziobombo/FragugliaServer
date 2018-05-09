@@ -11,18 +11,19 @@
     proxy_pass: "{{ item.proxy_pass }}"
     auth: "{{ item.auth }}"
   loop: 
-    - { template_name: 'site', server_name: 'sickrage.fraguglia.it', proxy_pass: 'http://195.154.77.88:8081', auth: 'true' }
-    - { template_name: 'site', server_name: 'transmission.fraguglia.it', proxy_pass: 'http://195.154.77.88:9091', auth: 'true' }
+    - { template_name: 'site', server_name: 'sickrage.fraguglia.it', proxy_pass: 'http://195.154.77.88:8081', auth: 'false' }
+    - { template_name: 'site', server_name: 'transmission.fraguglia.it', proxy_pass: 'http://195.154.77.88:9091', auth: 'false' }
+    - { template_name: 'jenkins', server_name: 'jenkins.fraguglia.it', proxy_pass: 'http://195.154.77.88:8080', auth: 'true' }
 
 - name: Setup plex vhost
   template:
     src=plex.j2
     dest=/etc/nginx/conf.d/plex.fraguglia.it.conf
 
-- name: Absent default file
-  file:
-    path: /etc/nginx/conf.d/default.conf
-    state: absent
+- name: Install our own default file
+  template:
+    src=default.j2
+    dest=/etc/nginx/conf.d/default.conf
 
 - htpasswd:
     path: /etc/nginx/passwdfile
@@ -49,16 +50,19 @@
     certbot_create_method: standalone
     certbot_certs:
       - domains:
+        - fraguglia.it
+        - jenkins.fraguglia.it
         - transmission.fraguglia.it
         - sickrage.fraguglia.it
         - plex.fraguglia.it
+        - cloud.fraguglia.it
     certbot_admin_email: riccardo.casazza@gmail.com
     certbot_create_standalone_stop_service: 
       - nginx
-    certbot_create_command: "{{ certbot_script }} certonly --standalone --staging --noninteractive --agree-tos --expand --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
+    certbot_create_command: "{{ certbot_script }} certonly --standalone --noninteractive --agree-tos --expand --email {{ cert_item.email | default(certbot_admin_email) }} -d {{ cert_item.domains | join(',') }}"
 
 - name: Start service nginx, if not running
   service:
     name: nginx
-    state: started
+    state: restarted
 

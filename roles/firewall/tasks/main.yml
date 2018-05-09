@@ -1,8 +1,39 @@
-- ufw:
-    state: enabled
-    policy: allow
+- name: Shorewall
+  include_role:
+    name: SphericalElephant.shorewall
+  vars:
+    shorewall: True
+    shorewall6: False
+    shorewall_interfaces:
+      - { zone: net, interface: eno1, options: "dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0" }
+      - { zone: dock, interface: docker0, options: "bridge" }
+    shorewall_policies:
+      - { source: dock, dest: "$FW", policy: REJECT }
+      - { source: dock, dest: all, policy: ACCEPT }
+      - { source: "$FW", dest: all, policy: ACCEPT }
+      - { source: net, dest: all, policy: REJECT }
+      - { source: all, dest: all, policy: REJECT }
+    shorewall_rules:
+      - section: NEW
+        rules:
+        - { action: "Invalid(DROP)", source: net, dest: "$FW", proto: tcp }
+        - { action: ACCEPT, source: net, dest: "$FW", proto: tcp, dest_port: ssh }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp,udp", dest_port: "http,https" }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp,udp", dest_port: 51413 }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp,udp", dest_port: 32400 }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp,udp", dest_port: 32469 }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: udp, dest_port: 5353 }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: udp, dest_port: 1900 }
+        - { action: ACCEPT, source: net, dest: "$FW", proto: icmp, dest_port: echo-request }
+    shorewall_zones:
+      - { zone: fw, type: firewall }
+      - { zone: net, type: ipv4 }
+      - { zone: dock, type: ipv4 }
 
-- ufw:
-    rule: deny
-    port: 8081
-    direction: in
+- name: Docker support in Shorewall
+  lineinfile: path=/etc/shorewall/shorewall.conf line='DOCKER=Yes'
+
+- name: Restart service shorewall, in all cases
+  service:
+    name: shorewall
+    state: restarted

@@ -25,6 +25,9 @@ server {
 
     server_name  {{ server_name }};
 
+    access_log /var/log/nginx/{{ server_name }}_access.log;
+    error_log /var/log/nginx/{{ server_name }}_error.log;
+
     location / {
 {% if auth == "true" %}
         auth_basic "You shall not pass!";

@@ -6,8 +6,6 @@
   roles:
     - common
     - docker
-    - transmission
-#    - sickrage
-#    - plex
     - nginx
     - firewall
+    - jenkins

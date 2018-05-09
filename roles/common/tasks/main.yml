@@ -7,7 +7,9 @@
   apt_repository: repo={{item}} state=present
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
-   
+    - ppa:webupd8team/java
+    - ppa:hawq/shorewall
+
 - name: Unwanted packages
   apt: name={{item}} state=absent update_cache=yes purge=yes
   with_items:
@@ -28,6 +30,20 @@
     - htop
     - python-pip
     - python-passlib
+
+- name: Accept Java 8 License
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+- name: Install Oracle Java 8
+  become: yes
+  apt: name={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
+
+- name: Install ServerPack
+  apt: state=present deb=https://raw.githubusercontent.com/ziobombo/ServerPack/mvn-repo/it/fraguglia/ServerPack/1.0.1/ServerPack-1.0.1.deb
 
 - name: Update all packages to the latest version
   apt:
@@ -55,7 +71,8 @@
     uid: 20000
     group: server0
     home: /home/server0
-    password: "{{ server0_password }}"
+    password: $6$6xL4lgJDf8PEss1$sYKCnrc8sEkE9.adtHv6K0EpAEf4In6HqSvdc4zDqUQE3b331pM7qt9e/9mZjID/ZGiqh4WUcmNOFUcpi1BxH1 
+    shell: /bin/bash
 
 - name: Variables in sysctl
   sysctl:

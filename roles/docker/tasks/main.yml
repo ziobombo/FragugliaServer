@@ -1,3 +1,8 @@
+- name: Shorewall to be stopped
+  service:
+    name: shorewall
+    state: stopped
+
 - name: Docker images
   docker_service:
     project_name: fragugliaserver
@@ -11,16 +16,13 @@
           image: linuxserver/sickrage:latest
           volumes:
             - /home/server0/configuration/SickRage:/config
-            - /home/server0/temp/sr_downloads:/downloads
+            - /home/server0/temp/t_downloads/complete:/downloads
             - /home/server0/data/tvshows:/tv
           environment:
             - PGID=20000
             - PUID=20000
             - TZ=Europe/Paris
-          ports:
-            - "8081:8081"
-          links:
-            - transmission
+          network_mode: "host"
         transmission:
           container_name: transmission
           image: linuxserver/transmission:latest
@@ -31,10 +33,7 @@
             - PGID=20000
             - PUID=20000
             - TZ=Europe/Paris
-          ports:
-            - "9091:9091"
-            - "51413:51413"
-            - "51413:51413/udp"
+          network_mode: "host"
         plex:
           container_name: plex
           image: linuxserver/plex:latest
@@ -49,16 +48,18 @@
             - TZ=Europe/Paris
             - VERSION=latest
           network_mode: "host"
-#        nginx:
-#          container_name: nginx
-#          image: linuxserver/nginx:latest
-#          volumes:
-#            - /home/server0/configuration/Nginx:/config
-#          environment:
-#            - PGID=20000
-#            - PUID=20000
-#            - TZ=Europe/Paris
-#          ports:
-#            - "80:80"
-#            - "443:443"
-
+        jenkins:
+          container_name: jenkins
+          image: 'jenkins/jenkins:latest'
+          network_mode: "host"
+          volumes:
+            - '/home/server0/configuration/Jenkins:/var/jenkins_home'
+          user: "20000"
+          environment:
+            - JENKINS_OPTS=--httpListenAddress=127.0.0.1
+- file:
+    path: /home/server0
+    owner: server0
+    group: server0
+    recurse: yes
+    state: directory
