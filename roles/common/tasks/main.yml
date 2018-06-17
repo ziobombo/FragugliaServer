@@ -44,6 +44,7 @@
 
 - name: Install ServerPack
   apt: state=present deb=https://raw.githubusercontent.com/ziobombo/ServerPack/mvn-repo/it/fraguglia/ServerPack/1.0.1/ServerPack-1.0.1.deb
+  when: ansible_nodename == "server0"
 
 - name: Update all packages to the latest version
   apt:

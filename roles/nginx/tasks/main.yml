@@ -33,10 +33,6 @@
     group: nginx
     mode: 0640
 
-- openssl_dhparam:
-    path: /etc/ssl/dhparams.pem
-    size: 2048
-
 - name: Generate certificates
   include_role:
     name: geerlingguy.certbot
@@ -55,7 +51,6 @@
         - transmission.fraguglia.it
         - sickrage.fraguglia.it
         - plex.fraguglia.it
-        - cloud.fraguglia.it
     certbot_admin_email: riccardo.casazza@gmail.com
     certbot_create_standalone_stop_service: 
       - nginx

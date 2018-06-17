@@ -1,0 +1,10 @@
+- name: Google Photos sync in docker
+  docker_container:
+    name: googlephotossync
+    image: ziobombo/googlephotosonwineonx11
+    security_opts:
+      - seccomp=unconfined
+    ports:
+      - "8081:8080"
+    pull: yes
+    restart: yes
