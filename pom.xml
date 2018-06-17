@@ -3,7 +3,7 @@
  
     <groupId>it.fraguglia</groupId>
     <artifactId>FragugliaServer</artifactId>
-    <version>5.1.0</version>
+    <version>5.2.0</version>
  
     <build>
         <plugins>
@@ -12,12 +12,11 @@
                 <artifactId>jgitflow-maven-plugin</artifactId>
                 <version>1.0-m5.1</version>
                 <configuration>
+                    <noDeploy>true</noDeploy>
+                    <pushReleases>true</pushReleases>
                     <flowInitContext>
                         <masterBranchName>master</masterBranchName>
                         <developBranchName>development</developBranchName>
-                        <featureBranchPrefix>feature-</featureBranchPrefix>
-                        <releaseBranchPrefix>release-</releaseBranchPrefix>
-                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
                     </flowInitContext>
                 </configuration>
             </plugin>
