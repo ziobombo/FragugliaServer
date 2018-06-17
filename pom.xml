@@ -14,6 +14,10 @@
                 <configuration>
                     <noDeploy>true</noDeploy>
                     <pushReleases>true</pushReleases>
+                    <flowInitContext>
+                        <masterBranchName>master</masterBranchName>
+                        <developBranchName>development</developBranchName>
+                    </flowInitContext>
                 </configuration>
             </plugin>
         </plugins>
