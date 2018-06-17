@@ -1,0 +1,10 @@
+- hosts: cubo
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  roles:
+    - common
+    - jenkins
+    - wine
+   
