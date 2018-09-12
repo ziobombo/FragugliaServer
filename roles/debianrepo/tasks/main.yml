@@ -1,0 +1,27 @@
+- name: Start service docker, if not running
+  service:
+    name: docker
+    state: started
+
+- name: debianrepo
+  docker_service:
+    project_name: fragugliaserver
+    pull: yes
+    restarted: yes
+    definition:
+      version: '3.6'
+      services:
+        debianrepo:
+          container_name: debianrepo
+          image: 'glenux/debian-repository:latest'
+          ports:
+            - "49160:22"
+            - "49161:80"
+          volumes:
+            - '/home/server0/configuration/DebianRepo/keys:/docker/keys'
+- file:
+    path: /home/server0
+    owner: server0
+    group: server0
+    recurse: yes
+    state: directory
