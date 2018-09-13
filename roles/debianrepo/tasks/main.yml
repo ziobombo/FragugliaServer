@@ -19,6 +19,7 @@
             - "49161:80"
           volumes:
             - '/home/server0/configuration/DebianRepo/keys:/docker/keys'
+          restart: always
 - file:
     path: /home/server0
     owner: server0
