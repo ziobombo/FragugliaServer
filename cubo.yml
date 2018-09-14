@@ -4,6 +4,5 @@
   become_method: sudo
 
   roles:
-    - common
     - debianrepo
    
