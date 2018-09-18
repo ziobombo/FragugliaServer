@@ -29,6 +29,7 @@
     - docker-ce
     - htop
     - python-pip
+    - mvn
     - python-passlib
 
 - name: Accept Java 8 License
