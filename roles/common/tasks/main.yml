@@ -10,55 +10,45 @@
     - ppa:webupd8team/java
     - ppa:hawq/shorewall
 
-- name: Unwanted packages
-  apt: name={{item}} state=absent update_cache=yes purge=yes
-  with_items:
-    - docker
-    - docker-engine
-    - docker.io
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+    update_cache: yes
 
+- name: Unwanted packages
+  apt:
+    state: absent
+    update_cache: yes
+    purge: yes
+    name: ['docker', 'docker-engine', 'docker.io']
+  
 - name: Base packages
-  apt: name={{item}} state=latest update_cache=yes
-  with_items:
-    - vim
-    - aptitude
-    - apt-transport-https 
-    - ca-certificates 
-    - curl 
-    - software-properties-common
-    - docker-ce
-    - htop
-    - python-pip
-    - python-passlib
+  apt: 
+    name: ['vim', 'aptitude', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common','docker-ce', 'htop', 'python-pip', 'maven', 'python-passlib']
+    state: latest 
+    update_cache: yes
 
 - name: Accept Java 8 License
   debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
 - name: Install Oracle Java 8
   become: yes
-  apt: name={{item}} state=latest
-  with_items:
-    - oracle-java8-installer
-    - ca-certificates
-    - oracle-java8-set-default
+  apt: 
+    name: ['oracle-java8-installer', 'ca-certificates', 'oracle-java8-set-default']
+    state: latest
 
 - name: Install ServerPack
   apt: state=present deb=https://raw.githubusercontent.com/ziobombo/ServerPack/mvn-repo/it/fraguglia/ServerPack/1.0.1/ServerPack-1.0.1.deb
   when: ansible_nodename == "server0"
 
-- name: Update all packages to the latest version
-  apt:
-    upgrade: dist
-    update_cache: yes
+- name: Install PhotoExport
+  apt: state=present deb=wget https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.4.0/PhotosExport-1.4.0.deb
+  when: ansible_nodename == "cubo"
 
 - name: docker-py (pip)
   pip:
-    name: "{{item}}"
+    name: ['pip', 'docker', 'docker-compose']
     state: latest
-  with_items:
-    - pip
-    - docker
-    - docker-compose
 
 - name: Ensure group "server0" exists
   group:
