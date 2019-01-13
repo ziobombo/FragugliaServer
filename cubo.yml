@@ -4,5 +4,5 @@
   become_method: sudo
 
   roles:
-    - debianrepo
-   
+    - common   
+    - spark 
