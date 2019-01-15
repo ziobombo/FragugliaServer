@@ -42,7 +42,7 @@
   when: ansible_nodename == "server0"
 
 - name: Install PhotoExport
-  apt: state=present deb=wget https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.4.0/PhotosExport-1.4.0.deb
+  apt: state=present deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.4.0/PhotosExport-1.4.0.deb
   when: ansible_nodename == "cubo"
 
 - name: docker-py (pip)
@@ -73,4 +73,12 @@
   loop:
     - { name: 'net.core.rmem_max', value: '4194394' }
     - { name: 'net.core.wmem_max', value: '1048576' }
+
+- name: Allow 'server0' group to sudo execute chown passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%server0 ALL=NOPASSWD: /bin/chown'
+    validate: 'visudo -cf %s'
+
 
