@@ -42,7 +42,7 @@
   when: ansible_nodename == "server0"
 
 - name: Install PhotoExport
-  apt: state=present deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.4.0/PhotosExport-1.4.0.deb
+  apt: state=present deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.12.0/PhotosExport-1.12.0.deb
   when: ansible_nodename == "cubo"
 
 - name: docker-py (pip)
@@ -79,6 +79,13 @@
     dest: /etc/sudoers
     state: present
     line: '%server0 ALL=NOPASSWD: /bin/chown'
+    validate: 'visudo -cf %s'
+
+- name: Allow 'server0' user to sudo as user photo passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'server0 ALL=(photo) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
 
