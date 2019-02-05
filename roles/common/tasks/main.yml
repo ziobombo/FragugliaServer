@@ -74,11 +74,11 @@
     - { name: 'net.core.rmem_max', value: '4194394' }
     - { name: 'net.core.wmem_max', value: '1048576' }
 
-- name: Allow 'server0' group to sudo execute chown passwordless
+- name: Allow 'server0' user to sudo execute chown passwordless
   lineinfile:
     dest: /etc/sudoers
     state: present
-    line: '%server0 ALL=NOPASSWD: /bin/chown'
+    line: 'server0 ALL=NOPASSWD: /bin/chown'
     validate: 'visudo -cf %s'
 
 - name: Allow 'server0' user to sudo as user photo passwordless
@@ -88,4 +88,9 @@
     line: 'server0 ALL=(photo) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
-
+- name: Allow 'server0' user to sudo command find passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'server0 ALL=NOPASSWD: /usr/bin/find'
+    validate: 'visudo -cf %s'

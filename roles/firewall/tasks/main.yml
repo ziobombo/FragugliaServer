@@ -1,14 +1,17 @@
 - name: Shorewall
   include_role:
-    name: SphericalElephant.shorewall
+    name: ziobombo.ansible_shorewall
   vars:
     shorewall: True
     shorewall6: False
     shorewall_interfaces:
       - { zone: net, interface: eno1, options: "dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0" }
       - { zone: dock, interface: docker0, options: "bridge" }
+      - { zone: vpn, interface: tun0 }
     shorewall_policies:
       - { source: dock, dest: "$FW", policy: REJECT }
+      - { source: "$FW", dest: vpn, policy: ACCEPT }
+      - { source: vpn, dest: "$FW", policy: ACCEPT }
       - { source: dock, dest: all, policy: ACCEPT }
       - { source: "$FW", dest: all, policy: ACCEPT }
       - { source: net, dest: all, policy: REJECT }
@@ -29,6 +32,9 @@
       - { zone: fw, type: firewall }
       - { zone: net, type: ipv4 }
       - { zone: dock, type: ipv4 }
+      - { zone: vpn, type: ipv4 }
+    shorewall_tunnels:
+      - { type: openvpnserver, zone: net, gateway: 0.0.0.0/0 }
 
 - name: Docker support in Shorewall
   lineinfile: path=/etc/shorewall/shorewall.conf line='DOCKER=Yes'
@@ -37,3 +43,4 @@
   service:
     name: shorewall
     state: restarted
+    enabled: no
