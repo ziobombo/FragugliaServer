@@ -7,5 +7,6 @@
     - common
     - docker
     - nginx
+    - anon
     - firewall
 

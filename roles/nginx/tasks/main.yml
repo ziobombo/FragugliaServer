@@ -13,7 +13,7 @@
   loop: 
     - { template_name: 'site', server_name: 'sickrage.fraguglia.it', proxy_pass: 'http://195.154.77.88:8081', auth: 'false' }
     - { template_name: 'site', server_name: 'transmission.fraguglia.it', proxy_pass: 'http://195.154.77.88:9091', auth: 'false' }
-    - { template_name: 'jenkins', server_name: 'jenkins.fraguglia.it', proxy_pass: 'http://195.154.77.88:8080', auth: 'true' }
+    - { template_name: 'site', server_name: 'anon.fraguglia.it', proxy_pass: 'https://195.154.77.88:943', auth: 'true' }
 
 - name: Setup plex vhost
   template:
@@ -47,7 +47,7 @@
     certbot_certs:
       - domains:
         - fraguglia.it
-        - jenkins.fraguglia.it
+        - anon.fraguglia.it
         - transmission.fraguglia.it
         - sickrage.fraguglia.it
         - plex.fraguglia.it

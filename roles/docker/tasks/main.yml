@@ -24,7 +24,33 @@
             - TZ=Europe/Paris
           network_mode: "host"
           restart: always
-        
+        transmission:
+          container_name: transmission
+          image: linuxserver/transmission:latest
+          volumes:
+            - /home/server0/configuration/Transmission:/config
+            - /home/server0/temp/t_downloads:/downloads
+          environment:
+            - PGID=20000
+            - PUID=20000
+            - TZ=Europe/Paris
+          network_mode: "host"
+          restart: always
+        plex:
+          container_name: plex
+          image: linuxserver/plex:latest
+          volumes:
+            - /home/server0/configuration/Plex:/config
+            - /home/server0/data/tvshows:/data/tvshows
+            - /home/server0/data/movies:/data/movies
+            - /home/server0/temp/p_transcode:/transcode
+          environment:
+            - PGID=20000
+            - PUID=20000
+            - TZ=Europe/Paris
+            - VERSION=latest
+          network_mode: "host"
+          restart: always
 - file:
     path: /home/server0
     owner: server0

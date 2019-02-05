@@ -3,7 +3,7 @@
  
     <groupId>it.fraguglia</groupId>
     <artifactId>FragugliaServer</artifactId>
-    <version>6.2.0</version>
+    <version>7.0.0</version>
  
     <build>
         <plugins>
