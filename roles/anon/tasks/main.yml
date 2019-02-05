@@ -1,0 +1,39 @@
+- name: Shorewall to be stopped
+  service:
+    name: shorewall
+    state: stopped
+
+- name: Docker images
+  docker_service:
+    project_name: fragugliaserver
+    pull: yes
+    restarted: yes
+    definition:
+      version: '3.6'
+      services:
+        openvpn-as:
+          image: linuxserver/openvpn-as:latest
+          container_name: openvpn-as
+          volumes:
+            - /home/server0/configuration/OpenvpnAS:/config
+          environment:
+            - PUID=20000
+            - GUID=20000
+            - INTERFACE=eno1
+            - TZ=Europe/Paris
+          cap_add:
+            - ALL
+          restart: always
+          network_mode: "host"
+        socks5:
+          image: xkuma/socks5
+          container_name: socks5
+          restart: always
+          network_mode: "host"
+      
+- file:
+    path: /home/server0
+    owner: server0
+    group: server0
+    recurse: yes
+    state: directory
