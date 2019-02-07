@@ -1,10 +1,14 @@
 - name: Apt keys
-  apt_key: url={{item}} state=present
+  apt_key: url={{ item }} state=present
   with_items:
     - https://download.docker.com/linux/ubuntu/gpg
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
-- name: Apt repos 
-  apt_repository: repo={{item}} state=present
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
     - ppa:webupd8team/java
@@ -14,6 +18,10 @@
   apt:
     upgrade: dist
     update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Unwanted packages
   apt:
@@ -21,34 +29,66 @@
     update_cache: yes
     purge: yes
     name: ['docker', 'docker-engine', 'docker.io']
-  
+
 - name: Base packages
-  apt: 
-    name: ['vim', 'aptitude', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common','docker-ce', 'htop', 'python-pip', 'maven', 'python-passlib']
-    state: latest 
+  apt:
+    name:
+      - 'vim'
+      - 'aptitude'
+      - 'apt-transport-https'
+      - 'ca-certificates'
+      - 'curl'
+      - 'software-properties-common'
+      - 'docker-ce'
+      - 'htop'
+      - 'python-pip'
+      - 'maven'
+      - 'python-passlib'
     update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Accept Java 8 License
   debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
 - name: Install Oracle Java 8
   become: yes
-  apt: 
+  apt:
     name: ['oracle-java8-installer', 'ca-certificates', 'oracle-java8-set-default']
-    state: latest
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Install ServerPack
-  apt: state=present deb=https://raw.githubusercontent.com/ziobombo/ServerPack/mvn-repo/it/fraguglia/ServerPack/1.0.1/ServerPack-1.0.1.deb
+  apt:
+    state=present
+    deb=https://github.com/ziobombo/ServerPack/raw/mvn-repo/it/fraguglia/ServerPack/1.0.1/ServerPack-1.0.1.deb
   when: ansible_nodename == "server0"
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Install PhotoExport
-  apt: state=present deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.12.0/PhotosExport-1.12.0.deb
+  apt:
+    state=present
+    deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.12.0/PhotosExport-1.12.0.deb
   when: ansible_nodename == "cubo"
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: docker-py (pip)
   pip:
     name: ['pip', 'docker', 'docker-compose']
-    state: latest
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Ensure group "server0" exists
   group:
@@ -62,7 +102,7 @@
     uid: 20000
     group: server0
     home: /home/server0
-    password: $6$6xL4lgJDf8PEss1$sYKCnrc8sEkE9.adtHv6K0EpAEf4In6HqSvdc4zDqUQE3b331pM7qt9e/9mZjID/ZGiqh4WUcmNOFUcpi1BxH1 
+    password: $6$6xL4lgJDf8PEss1$sYKCnrc8sEkE9.adtHv6K0EpAEf4In6HqSvdc4zDqUQE3b331pM7qt9e/9mZjID/ZGiqh4WUcmNOFUcpi1BxH1
     shell: /bin/bash
 
 - name: Variables in sysctl

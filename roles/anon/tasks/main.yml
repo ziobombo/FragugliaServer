@@ -30,8 +30,8 @@
           container_name: socks5
           restart: always
           network_mode: "host"
-      
-- file:
+- name: Server0 home existing
+  file:
     path: /home/server0
     owner: server0
     group: server0
