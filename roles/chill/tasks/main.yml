@@ -1,3 +1,4 @@
+---
 - name: Shorewall to be stopped
   service:
     name: shorewall
@@ -6,8 +7,8 @@
 - name: Docker images
   docker_service:
     project_name: fragugliaserver
-    pull: yes
-    restarted: yes
+    pull: true
+    restarted: true
     definition:
       version: '3.6'
       services:
@@ -51,9 +52,10 @@
             - VERSION=latest
           network_mode: "host"
           restart: always
-- file:
+- name: Home for server0 exists
+  file:
     path: /home/server0
     owner: server0
     group: server0
-    recurse: yes
+    recurse: true
     state: directory

@@ -1,12 +1,12 @@
+---
 - hosts: server0
   remote_user: root
-  become: yes
+  become: true
   become_method: sudo
 
   roles:
     - common
-    - docker
+    - chill
     - nginx
     - anon
     - firewall
-

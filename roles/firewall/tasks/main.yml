@@ -7,11 +7,9 @@
     shorewall_interfaces:
       - { zone: net, interface: eno1, options: "dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0" }
       - { zone: dock, interface: docker0, options: "bridge" }
-      - { zone: vpn, interface: tun0 }
+      - { zone: vpn, interface: as0t+ }
     shorewall_policies:
-      - { source: dock, dest: "$FW", policy: REJECT }
-      - { source: "$FW", dest: vpn, policy: ACCEPT }
-      - { source: vpn, dest: "$FW", policy: ACCEPT }
+      - { source: vpn, dest: all, policy: ACCEPT }
       - { source: dock, dest: all, policy: ACCEPT }
       - { source: "$FW", dest: all, policy: ACCEPT }
       - { source: net, dest: all, policy: REJECT }
