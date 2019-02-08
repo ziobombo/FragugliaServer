@@ -75,7 +75,7 @@
 - name: Install PhotoExport
   apt:
     state=present
-    deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.12.0/PhotosExport-1.12.0.deb
+    deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.14.0/PhotosExport-1.14.0.deb
   when: ansible_nodename == "cubo"
   register: task_result
   until: task_result is success
