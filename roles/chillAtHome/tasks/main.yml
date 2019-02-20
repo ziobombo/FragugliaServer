@@ -18,7 +18,7 @@
           volumes:
             - /home/server0/configuration/SickRage:/config
             - /home/server0/temp/t_downloads/complete:/downloads
-            - /home/server0/data/tvshows:/tv
+            - /home/server0/data/Library/tvshows:/tv
           environment:
             - PGID=20000
             - PUID=20000
@@ -37,21 +37,6 @@
             - TZ=Europe/Paris
           network_mode: "host"
           restart: always
-        plex:
-          container_name: plex
-          image: linuxserver/plex
-          volumes:
-            - /home/server0/configuration/Plex:/config
-            - /home/server0/data/tvshows:/data/tvshows
-            - /home/server0/data/movies:/data/movies
-            - /home/server0/temp/p_transcode:/transcode
-          environment:
-            - PGID=20000
-            - PUID=20000
-            - TZ=Europe/Paris
-            - VERSION=latest
-          network_mode: "host"
-          restart: always
                 
 - name: Home for server0 exists
   file:
@@ -60,3 +45,4 @@
     group: server0
     recurse: true
     state: directory
+
