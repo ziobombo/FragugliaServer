@@ -28,7 +28,7 @@
     state: absent
     update_cache: yes
     purge: yes
-    name: ['docker', 'docker-engine', 'docker.io']
+    name: ['docker', 'docker-engine', 'docker.io', 'haveged', 'accountsservice']
 
 - name: Base packages
   apt:
@@ -62,6 +62,18 @@
   retries: 10
   delay: 2
 
+- name: NVIDIA driver
+  apt:
+    name:
+      - 'nvidia-375'
+      - 'nvidia-modprobe'
+    update_cache: yes
+  when: ansible_nodename == "cubo"
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
 - name: Install ServerPack
   apt:
     state=present
@@ -75,7 +87,7 @@
 - name: Install PhotoExport
   apt:
     state=present
-    deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.12.0/PhotosExport-1.12.0.deb
+    deb=https://github.com/ziobombo/PhotosExport/raw/mvn-repo/it/fraguglia/PhotosExport/1.14.0/PhotosExport-1.14.0.deb
   when: ansible_nodename == "cubo"
   register: task_result
   until: task_result is success
@@ -102,7 +114,7 @@
     uid: 20000
     group: server0
     home: /home/server0
-    password: $6$6xL4lgJDf8PEss1$sYKCnrc8sEkE9.adtHv6K0EpAEf4In6HqSvdc4zDqUQE3b331pM7qt9e/9mZjID/ZGiqh4WUcmNOFUcpi1BxH1
+    password: "{{ server0_password }}"
     shell: /bin/bash
 
 - name: Variables in sysctl

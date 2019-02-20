@@ -9,7 +9,7 @@
     pull: yes
     restarted: yes
     definition:
-      version: '3.6'
+      version: '3.7'
       services:
         openvpn-as:
           image: linuxserver/openvpn-as:latest
