@@ -14,7 +14,7 @@
       services:
         sickrage:
           container_name: sickrage
-          image: linuxserver/sickrage
+          image: linuxserver/sickrage:latest
           volumes:
             - /home/server0/configuration/SickRage:/config
             - /home/server0/temp/t_downloads/complete:/downloads
@@ -27,7 +27,7 @@
           restart: always
         transmission:
           container_name: transmission
-          image: linuxserver/transmission
+          image: linuxserver/transmission:latest
           volumes:
             - /home/server0/configuration/Transmission:/config
             - /home/server0/temp/t_downloads:/downloads

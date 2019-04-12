@@ -5,8 +5,8 @@
   become_method: sudo
 
   roles:
-    - common
-    - chill
-    - nginx
+#    - common
+#    - chill
+#    - nginx
     - anon
-    - firewall
+#    - firewall
