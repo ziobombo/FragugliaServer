@@ -1,3 +1,11 @@
+- name: one pip dep 
+  pip:
+    name: ['pyopenssl']
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
 - name: Apt keys
   apt_key: url={{ item }} state=present
   with_items:
@@ -9,10 +17,18 @@
 
 - name: Apt repos
   apt_repository: repo={{ item }} state=present
+  when: ansible_nodename == "cubo"
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
     - ppa:webupd8team/java
     - ppa:hawq/shorewall
+
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
+  when: ansible_nodename == "server0"
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    - ppa:webupd8team/java
 
 - name: Update all packages to the latest version
   apt:
@@ -28,7 +44,7 @@
     state: absent
     update_cache: yes
     purge: yes
-    name: ['docker', 'docker-engine', 'docker.io', 'haveged', 'accountsservice']
+    name: ['docker', 'docker-engine', 'docker.io', 'haveged', 'accountsservice', 'network-manager-gnome', 'network-manager']
 
 - name: Base packages
   apt:
@@ -44,6 +60,8 @@
       - 'python-pip'
       - 'maven'
       - 'python-passlib'
+      - 'shorewall'
+      - 'jenkins'
     update_cache: yes
   register: task_result
   until: task_result is success
@@ -52,6 +70,8 @@
 
 - name: Accept Java 8 License
   debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+  when: ansible_nodename != "server0_mini"
+
 
 - name: Install Oracle Java 8
   become: yes
@@ -61,6 +81,7 @@
   until: task_result is success
   retries: 10
   delay: 2
+  when: ansible_nodename != "server0_mini"
 
 - name: NVIDIA driver
   apt:
@@ -78,7 +99,7 @@
   apt:
     state=present
     deb=https://github.com/ziobombo/ServerPack/raw/mvn-repo/it/fraguglia/ServerPack/1.0.1/ServerPack-1.0.1.deb
-  when: ansible_nodename == "server0"
+  when: ansible_nodename == "cubo"
   register: task_result
   until: task_result is success
   retries: 10
@@ -96,7 +117,7 @@
 
 - name: docker-py (pip)
   pip:
-    name: ['pip', 'docker', 'docker-compose']
+    name: ['pip', 'docker', 'docker-compose==1.24.0-rc1']
   register: task_result
   until: task_result is success
   retries: 10
@@ -114,7 +135,6 @@
     uid: 20000
     group: server0
     home: /home/server0
-    password: "{{ server0_password }}"
     shell: /bin/bash
 
 - name: Variables in sysctl
@@ -125,6 +145,9 @@
   loop:
     - { name: 'net.core.rmem_max', value: '4194394' }
     - { name: 'net.core.wmem_max', value: '1048576' }
+    - { name: 'net.ipv6.conf.all.disable_ipv6', value: '1' }
+    - { name: 'net.ipv6.conf.default.disable_ipv6', value: '1' }
+    - { name: 'net.ipv6.conf.lo.disable_ipv6', value: '1' }
 
 - name: Allow 'server0' user to sudo execute chown passwordless
   lineinfile:
@@ -133,11 +156,11 @@
     line: 'server0 ALL=NOPASSWD: /bin/chown'
     validate: 'visudo -cf %s'
 
-- name: Allow 'server0' user to sudo as user photo passwordless
+- name: Allow 'jenkins' user to sudo as user photo passwordless
   lineinfile:
     dest: /etc/sudoers
     state: present
-    line: 'server0 ALL=(photo) NOPASSWD: ALL'
+    line: 'jenkins ALL=(photo) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
 - name: Allow 'server0' user to sudo command find passwordless
@@ -146,3 +169,16 @@
     state: present
     line: 'server0 ALL=NOPASSWD: /usr/bin/find'
     validate: 'visudo -cf %s'
+
+- name: Allow 'jenkins' user to sudo command rsync as server0 passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'jenkins ALL=(server0) NOPASSWD: /usr/bin/rsync'
+    validate: 'visudo -cf %s'
+
+- name: Disable iscsid
+  service:
+    name: iscsid
+    state: stopped
+    enabled: no

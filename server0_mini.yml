@@ -1,12 +1,8 @@
 ---
-- hosts: server0
+- hosts: server0_mini
   remote_user: root
   become: true
   become_method: sudo
 
   roles:
-#    - common
-#    - chill
-#    - nginx
     - anon
-#    - firewall

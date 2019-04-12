@@ -5,7 +5,7 @@
     shorewall: True
     shorewall6: False
     shorewall_interfaces:
-      - { zone: net, interface: eno1, options: "dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0" }
+      - { zone: net, interface: eth0, options: "dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0" }
       - { zone: dock, interface: docker0, options: "bridge" }
       - { zone: vpn, interface: as0t+ }
     shorewall_policies:

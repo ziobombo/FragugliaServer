@@ -25,19 +25,104 @@
             - TZ=Europe/Paris
           network_mode: "host"
           restart: always
-        transmission:
-          container_name: transmission
-          image: linuxserver/transmission
-          volumes:
-            - /home/server0/configuration/Transmission:/config
-            - /home/server0/temp/t_downloads:/downloads
-          environment:
-            - PGID=20000
-            - PUID=20000
-            - TZ=Europe/Paris
-          network_mode: "host"
-          restart: always
-                
+#        heimdall:
+#            image: linuxserver/heimdall
+#            container_name: heimdall
+#            environment:
+#            - PUID=20000
+#            - PGID=20000
+#            - TZ=Europe/Paris
+#            volumes:
+#            - /home/server0/configuration/Heimdall:/config
+#            ports:
+#            - 80:80
+#            - 443:443
+#            restart: always
+- name: Plex apt keys
+  apt_key: url={{ item }} state=present
+  with_items:
+    - https://downloads.plex.tv/plex-keys/PlexSign.key
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Plex apt repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - deb https://downloads.plex.tv/repo/deb ./public main
+
+- name: Plex installed
+  apt:
+    name:
+      - 'plexmediaserver'
+    update_cache: yes
+    state: latest
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Plex to be stopped
+  service:
+    name: plexmediaserver
+    state: stopped
+
+- name: Plex library mounted
+  mount:
+    path: /var/lib/plexmediaserver/Library
+    src: /home/plex/Library
+    fstype: none
+    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
+    state: present
+
+- name: Plex tvshow library mounted
+  mount:
+    path: /home/server0/data/Library/tvshows
+    src: /home/plex/tvshows
+    fstype: none
+    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
+    state: present
+
+- name: host temp files in zfs
+  lineinfile:
+    path: /etc/default/plexmediaserver
+    regexp: '^export PLEX_MEDIA_SERVER_TMPDIR'
+    line: 'export PLEX_MEDIA_SERVER_TMPDIR=/home/plex/temp'
+
+- name: run as user server0
+  lineinfile:
+    path: /etc/default/plexmediaserver
+    regexp: '^export PLEX_MEDIA_SERVER_USER'
+    line: 'export PLEX_MEDIA_SERVER_USER=server0'
+
+- name: host temp files in zfs (to be sure)
+  lineinfile:
+    path: /lib/systemd/system/plexmediaserver.service
+    regexp: '^Environment\=PLEX_MEDIA_SERVER_TMPDIR'
+    line: 'Environment=PLEX_MEDIA_SERVER_TMPDIR=/home/plex/temp'
+
+- name: run as user server0 (to be sure)
+  lineinfile:
+    path: /lib/systemd/system/plexmediaserver.service
+    regexp: '^User\='
+    line: 'User=server0'
+
+- name: run as group server0 (to be sure)
+  lineinfile:
+    path: /lib/systemd/system/plexmediaserver.service
+    regexp: '^Group\='
+    line: 'Group=server0'
+
+- name: just force systemd to reread configs (2.4 and above)
+  systemd:
+    daemon_reload: yes
+
+- name: Plex to be started
+  service:
+    name: plexmediaserver
+    state: started
+
 - name: Home for server0 exists
   file:
     path: /home/server0
@@ -45,4 +130,55 @@
     group: server0
     recurse: true
     state: directory
+
+- name: Transmission Apt repo
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - ppa:transmissionbt/ppa
+
+- name: Transmission and tsocks installed
+  apt:
+    name:
+      - 'transmission'
+      - 'tsocks'
+    update_cache: yes
+    state: latest
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Setup tsocks
+  template:
+    src=tsocks.conf.j2
+    dest=/etc/tsocks.conf
+
+- name: Transmission stopped for maintenance
+  service:
+    name: transmission-daemon
+    state: stopped
+
+- name: Run Transmission as server0
+  lineinfile:
+    path: /lib/systemd/system/transmission-daemon.service
+    regexp: '^User\='
+    line: 'User=server0'
+
+- name: Run Transmission through tsocks
+  lineinfile:
+    path: /lib/systemd/system/transmission-daemon.service
+    regexp: '^ExecStart\='
+    line: 'ExecStart=/usr/bin/tsocks /usr/bin/transmission-daemon -f -g /home/server0/configuration/Transmission --log-error'
+
+- name: just force systemd to reread configs (2.4 and above)
+  systemd:
+    daemon_reload: yes
+
+- name: Transmission started
+  service:
+    name: transmission-daemon
+    state: started
+
+
+
 
