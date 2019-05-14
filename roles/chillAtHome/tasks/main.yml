@@ -4,7 +4,7 @@
     name: shorewall
     state: stopped
 
-- name: Docker images
+- name: Sickchill & Deluge docker images
   docker_service:
     project_name: fragugliaserver
     pull: true
@@ -25,19 +25,21 @@
             - TZ=Europe/Paris
           network_mode: "host"
           restart: always
-#        heimdall:
-#            image: linuxserver/heimdall
-#            container_name: heimdall
-#            environment:
-#            - PUID=20000
-#            - PGID=20000
-#            - TZ=Europe/Paris
-#            volumes:
-#            - /home/server0/configuration/Heimdall:/config
-#            ports:
-#            - 80:80
-#            - 443:443
-#            restart: always
+        deluge:
+          image: linuxserver/deluge
+          container_name: deluge
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - UMASK_SET=<022>
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/Deluge:/config
+            - /home/server0/temp/t_downloads:/downloads
+            - /home/plex:/downloads/movies
+          network_mode: host
+          restart: always
+
 - name: Plex apt keys
   apt_key: url={{ item }} state=present
   with_items:
@@ -131,53 +133,9 @@
     recurse: true
     state: directory
 
-- name: Transmission Apt repo
-  apt_repository: repo={{ item }} state=present
-  with_items:
-    - ppa:transmissionbt/ppa
-
-- name: Transmission and tsocks installed
-  apt:
-    name:
-      - 'transmission'
-      - 'tsocks'
-    update_cache: yes
-    state: latest
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
-- name: Setup tsocks
-  template:
-    src=tsocks.conf.j2
-    dest=/etc/tsocks.conf
-
-- name: Transmission stopped for maintenance
-  service:
-    name: transmission-daemon
-    state: stopped
-
-- name: Run Transmission as server0
-  lineinfile:
-    path: /lib/systemd/system/transmission-daemon.service
-    regexp: '^User\='
-    line: 'User=server0'
-
-- name: Run Transmission through tsocks
-  lineinfile:
-    path: /lib/systemd/system/transmission-daemon.service
-    regexp: '^ExecStart\='
-    line: 'ExecStart=/usr/bin/tsocks /usr/bin/transmission-daemon -f -g /home/server0/configuration/Transmission --log-error'
-
 - name: just force systemd to reread configs (2.4 and above)
   systemd:
     daemon_reload: yes
-
-- name: Transmission started
-  service:
-    name: transmission-daemon
-    state: started
 
 
 

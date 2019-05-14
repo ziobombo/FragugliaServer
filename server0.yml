@@ -8,5 +8,6 @@
 #    - common
 #    - chill
 #    - nginx
-    - anon
+#    - anon
 #    - firewall
+    - koha
