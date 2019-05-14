@@ -39,6 +39,20 @@
             - /home/plex:/downloads/movies
           network_mode: host
           restart: always
+        radarr:
+          image: linuxserver/radarr
+          container_name: radarr
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - UMASK_SET=022
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/Radarr:/config
+            - /home/server0/temp/t_downloads:/downloads
+            - /home/plex:/movies
+          network_mode: host
+          restart: always
 
 - name: Plex apt keys
   apt_key: url={{ item }} state=present
@@ -133,9 +147,6 @@
     recurse: true
     state: directory
 
-- name: just force systemd to reread configs (2.4 and above)
-  systemd:
-    daemon_reload: yes
 
 
 
