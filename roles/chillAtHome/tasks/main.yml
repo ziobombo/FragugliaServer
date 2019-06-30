@@ -12,26 +12,13 @@
     definition:
       version: '3.7'
       services:
-        sickrage:
-          container_name: sickrage
-          image: linuxserver/sickrage
-          volumes:
-            - /home/server0/configuration/SickRage:/config
-            - /home/server0/temp/t_downloads/complete:/downloads
-            - /home/server0/data/Library/tvshows:/tv
-          environment:
-            - PGID=20000
-            - PUID=20000
-            - TZ=Europe/Paris
-          network_mode: "host"
-          restart: always
         deluge:
           image: linuxserver/deluge
           container_name: deluge
           environment:
             - PUID=20000
             - PGID=20000
-            - UMASK_SET=<022>
+            - UMASK_SET=022
             - TZ=Europe/Paris
           volumes:
             - /home/server0/configuration/Deluge:/config
@@ -51,6 +38,20 @@
             - /home/server0/configuration/Radarr:/config
             - /home/server0/temp/t_downloads:/downloads
             - /home/plex:/movies
+          network_mode: host
+          restart: always
+        sonarr:
+          image: linuxserver/sonarr
+          container_name: sonarr
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - UMASK_SET=022
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/Sonarr:/config
+            - /home/plex/tvshows:/tv
+            - /home/server0/temp/t_downloads:/downloads
           network_mode: host
           restart: always
 

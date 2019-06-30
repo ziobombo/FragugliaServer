@@ -10,7 +10,7 @@
 - name: Apt repos
   apt_repository: repo={{ item }} state=present
   with_items:
-    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     - ppa:webupd8team/java
 
 - name: Update all packages to the latest version
@@ -58,16 +58,6 @@
   until: task_result is success
   retries: 10
   delay: 2
-
-- name: Install dante
-  apt:
-    state=present
-    deb=http://ppa.launchpad.net/dajhorn/dante/ubuntu/pool/main/d/dante/dante-server_1.4.1-1_amd64.deb
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-  
 
 - name: docker-py (pip)
   pip:
@@ -119,7 +109,7 @@
             - GUID=20000
             - TZ=Europe/Paris
             - URL=fraguglia.it
-            - SUBDOMAINS=anon,bitwarden,sickchill,deluge,plex,radarr,
+            - SUBDOMAINS=anon,bitwarden,sickchill,deluge,plex,radarr,sonarr,
             - VALIDATION=http
             - EMAIL=riccardo.casazza@gmail.com
             - DHLEVEL=2048
@@ -155,7 +145,7 @@
     shorewall6: False
     shorewall_interfaces:
       - { zone: net, interface: ens3, options: "dhcp,tcpflags,logmartians,nosmurfs,sourceroute=0" }
-      - { zone: dock, interface: docker0, options: "host" }
+      - { zone: dock, interface: docker0, options: "bridge" }
       - { zone: vpn, interface: as0t+ }
     shorewall_policies:
       - { source: vpn, dest: all, policy: ACCEPT }
@@ -168,7 +158,7 @@
         rules:
         - { action: "Invalid(DROP)", source: net, dest: "$FW", proto: tcp }
         - { action: ACCEPT, source: all, dest: "$FW", proto: tcp, dest_port: ssh }
-        - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp,udp", dest_port: "http,https" }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp", dest_port: "http,https" }
         - { action: ACCEPT, source: vpn, dest: "$FW", proto: "tcp,udp", dest_port: 1080 }
         - { action: ACCEPT, source: all, dest: "$FW", proto: "udp", dest_port: 1194 }
         - { action: ACCEPT, source: net, dest: "$FW", proto: icmp, dest_port: echo-request }
