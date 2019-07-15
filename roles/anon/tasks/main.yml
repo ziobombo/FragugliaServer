@@ -32,8 +32,8 @@
 - name: Base packages
   apt:
     name:
-      - 'dante-server'
       - 'vim'
+      - 'privoxy'
       - 'aptitude'
       - 'apt-transport-https'
       - 'ca-certificates'
@@ -127,16 +127,6 @@
     recurse: yes
     state: directory
 
-- name: dante conf
-  template:
-    src=danted.conf.j2
-    dest=/etc/danted.conf
-
-- name: Restart dante
-  service:
-    name: danted
-    state: restarted
-
 - name: Shorewall
   include_role:
     name: ziobombo.ansible_shorewall
@@ -172,6 +162,12 @@
 
 - name: Docker support in Shorewall
   lineinfile: path=/etc/shorewall/shorewall.conf line='DOCKER=Yes'
+
+- name: Privoxy setup
+  lineinfile:
+    path: /etc/privoxy/config
+    regexp: '^listen-address 127'
+    line: 'listen-address 192.168.3.1:1080'
 
 - name: Restart service shorewall, in all cases
   service:
