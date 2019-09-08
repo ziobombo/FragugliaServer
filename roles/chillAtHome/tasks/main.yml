@@ -64,17 +64,9 @@
   retries: 10
   delay: 2
 
-- name: Plex apt repos
-  apt_repository: repo={{ item }} state=present
-  with_items:
-    - deb https://downloads.plex.tv/repo/deb ./public main
-
-- name: Plex installed
+- name: Install plexmediaserver
   apt:
-    name:
-      - 'plexmediaserver'
-    update_cache: yes
-    state: latest
+    deb: https://plex.tv/downloads/latest/1?channel=8&build=linux-ubuntu-x86_64&distro=ubuntu
   register: task_result
   until: task_result is success
   retries: 10
