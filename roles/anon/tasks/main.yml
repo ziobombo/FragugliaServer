@@ -32,6 +32,7 @@
 - name: Base packages
   apt:
     name:
+      - 'default-jre'
       - 'vim'
       - 'privoxy'
       - 'aptitude'
