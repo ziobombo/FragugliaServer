@@ -175,3 +175,17 @@
     name: shorewall
     state: restarted
     enabled: no
+
+- name: Allow 'server0' user to sudo execute docker passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'server0 ALL=NOPASSWD: /usr/bin/docker'
+    validate: 'visudo -cf %s'
+
+- name: Allow 'server0' user to sudo execute apt-get passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'server0 ALL=NOPASSWD: /usr/bin/apt-get'
+    validate: 'visudo -cf %s'
