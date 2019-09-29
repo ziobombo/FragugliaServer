@@ -19,7 +19,7 @@
   apt_repository: repo={{ item }} state=present
   when: ansible_nodename == "cubo"
   with_items:
-    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     - ppa:webupd8team/java
     - ppa:hawq/shorewall
 
@@ -27,7 +27,7 @@
   apt_repository: repo={{ item }} state=present
   when: ansible_nodename == "server0"
   with_items:
-    - deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     - ppa:webupd8team/java
 
 - name: Update all packages to the latest version
