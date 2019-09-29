@@ -21,7 +21,6 @@
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     - ppa:webupd8team/java
-    - ppa:hawq/shorewall
 
 - name: Apt repos
   apt_repository: repo={{ item }} state=present
