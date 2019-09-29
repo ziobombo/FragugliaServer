@@ -21,6 +21,7 @@
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     - ppa:webupd8team/java
+    - deb https://downloads.plex.tv/repo/deb public main
 
 - name: Apt repos
   apt_repository: repo={{ item }} state=present

@@ -55,18 +55,11 @@
           network_mode: host
           restart: always
 
-- name: Plex apt keys
-  apt_key: url={{ item }} state=present
-  with_items:
-    - https://downloads.plex.tv/plex-keys/PlexSign.key
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
-- name: Install plexmediaserver
+- name: Base packages
   apt:
-    deb: https://plex.tv/downloads/latest/1?channel=8&build=linux-ubuntu-x86_64&distro=ubuntu
+    name:
+      - 'plexmediaserver'
+    update_cache: yes
   register: task_result
   until: task_result is success
   retries: 10
