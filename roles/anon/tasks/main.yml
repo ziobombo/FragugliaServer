@@ -32,6 +32,7 @@
 - name: Base packages
   apt:
     name:
+      - 'default-jre'
       - 'vim'
       - 'privoxy'
       - 'aptitude'
@@ -109,7 +110,7 @@
             - GUID=20000
             - TZ=Europe/Paris
             - URL=fraguglia.it
-            - SUBDOMAINS=anon,bitwarden,sickchill,deluge,plex,radarr,sonarr,jackett,jenkins,
+            - SUBDOMAINS=anon,bitwarden,sickchill,deluge,plex,radarr,sonarr,jenkins,jackett,
             - VALIDATION=http
             - EMAIL=riccardo.casazza@gmail.com
             - DHLEVEL=2048
@@ -174,3 +175,17 @@
     name: shorewall
     state: restarted
     enabled: no
+
+- name: Allow 'server0' user to sudo execute docker passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'server0 ALL=NOPASSWD: /usr/bin/docker'
+    validate: 'visudo -cf %s'
+
+- name: Allow 'server0' user to sudo execute apt-get passwordless
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: 'server0 ALL=NOPASSWD: /usr/bin/apt-get'
+    validate: 'visudo -cf %s'
