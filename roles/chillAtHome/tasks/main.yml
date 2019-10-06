@@ -26,6 +26,19 @@
             - /home/plex:/downloads/movies
           network_mode: host
           restart: always
+        jackett:
+          image: linuxserver/jackett
+          container_name: jackett
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - UMASK_SET=022
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/Jackett:/config
+            - /home/server0/temp/ja_downloads:/downloads
+          network_mode: host
+          restart: always
         radarr:
           image: linuxserver/radarr
           container_name: radarr
