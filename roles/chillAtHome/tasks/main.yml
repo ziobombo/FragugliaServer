@@ -4,6 +4,22 @@
     name: shorewall
     state: stopped
 
+- name: Plex library mounted
+  mount:
+    path: /var/lib/plexmediaserver/Library
+    src: /home/plex/Library
+    fstype: none
+    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
+    state: present
+
+- name: Plex tvshow library mounted
+  mount:
+    path: /home/server0/data/Library/tvshows
+    src: /home/plex/tvshows
+    fstype: none
+    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
+    state: present
+
 - name: Sickchill & Deluge docker images
   docker_service:
     project_name: fragugliaserver
@@ -67,76 +83,20 @@
             - /home/server0/temp/t_downloads:/downloads
           network_mode: host
           restart: always
-
-- name: Base packages
-  apt:
-    name:
-      - 'plexmediaserver'
-    update_cache: yes
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
-- name: Plex to be stopped
-  service:
-    name: plexmediaserver
-    state: stopped
-
-- name: Plex library mounted
-  mount:
-    path: /var/lib/plexmediaserver/Library
-    src: /home/plex/Library
-    fstype: none
-    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
-    state: present
-
-- name: Plex tvshow library mounted
-  mount:
-    path: /home/server0/data/Library/tvshows
-    src: /home/plex/tvshows
-    fstype: none
-    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
-    state: present
-
-- name: host temp files in zfs
-  lineinfile:
-    path: /etc/default/plexmediaserver
-    regexp: '^export PLEX_MEDIA_SERVER_TMPDIR'
-    line: 'export PLEX_MEDIA_SERVER_TMPDIR=/home/plex/temp'
-
-- name: run as user server0
-  lineinfile:
-    path: /etc/default/plexmediaserver
-    regexp: '^export PLEX_MEDIA_SERVER_USER'
-    line: 'export PLEX_MEDIA_SERVER_USER=server0'
-
-- name: host temp files in zfs (to be sure)
-  lineinfile:
-    path: /lib/systemd/system/plexmediaserver.service
-    regexp: '^Environment\=PLEX_MEDIA_SERVER_TMPDIR'
-    line: 'Environment=PLEX_MEDIA_SERVER_TMPDIR=/home/plex/temp'
-
-- name: run as user server0 (to be sure)
-  lineinfile:
-    path: /lib/systemd/system/plexmediaserver.service
-    regexp: '^User\='
-    line: 'User=server0'
-
-- name: run as group server0 (to be sure)
-  lineinfile:
-    path: /lib/systemd/system/plexmediaserver.service
-    regexp: '^Group\='
-    line: 'Group=server0'
-
-- name: just force systemd to reread configs (2.4 and above)
-  systemd:
-    daemon_reload: yes
-
-- name: Plex to be started
-  service:
-    name: plexmediaserver
-    state: started
+        plex:
+          image: linuxserver/plex
+          container_name: plex
+          network_mode: host
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - VERSION=docker
+          volumes:
+            - /home/plex:/config
+            - /home/plex/tvshow:/tv
+            - /home/plex:/movies
+            - /home/plex/transcode:/transcode
+          restart: always
 
 - name: Home for server0 exists
   file:
