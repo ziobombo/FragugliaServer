@@ -10,7 +10,6 @@
   apt_key: url={{ item }} state=present
   with_items:
     - https://download.docker.com/linux/ubuntu/gpg
-    - https://downloads.plex.tv/plex-keys/PlexSign.key
   register: task_result
   until: task_result is success
   retries: 10
