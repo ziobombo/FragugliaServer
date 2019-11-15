@@ -57,6 +57,7 @@
       - 'zfs-doc'
       - 'zfs-zed'
       - 'zfsutils-linux'
+      - 'fail2ban'
     update_cache: yes
   register: task_result
   until: task_result is success
@@ -140,3 +141,43 @@
     name: iscsid
     state: stopped
     enabled: no
+
+- name: Stop Jenkins
+  service:
+    name: jenkins
+    state: stopped
+
+- name: Jenkins running with the good user
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^JENKINS_USER'
+    line: 'JENKINS_USER=server0'
+
+- name: Jenkins running with the good group
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^JENKINS_GROUP'
+    line: 'JENKINS_GROUP=server0'
+
+- name: Jenkins pointing to the right home
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^JENKINS_HOME'
+    line: 'JENKINS_HOME=/home/server0/configuration/Jenkins'
+
+- name: Rights of some Jenkins dirs
+  file:
+    path: {{ item }}
+    owner: server0
+    group: server0
+    recurse: true
+    state: directory
+    with-items:
+      - /var/run/jenkins
+      - /var/log/jenkins
+      - /var/cache/jenkins
+
+- name: Jenkins started
+  service:
+    name: jenkins
+    state: started
