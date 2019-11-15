@@ -172,7 +172,7 @@
     group: server0
     recurse: true
     state: directory
-    with-items:
+    with_items:
       - /var/run/jenkins
       - /var/log/jenkins
       - /var/cache/jenkins
