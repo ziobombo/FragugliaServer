@@ -92,7 +92,7 @@
     - { name: 'net.core.wmem_max', value: '1048576' }
 
 - name: Docker images
-  docker_service:
+  docker_compose:
     project_name: fragugliaserver
     pull: yes
     restarted: yes

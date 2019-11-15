@@ -1,8 +1,4 @@
 ---
-- name: Shorewall to be stopped
-  service:
-    name: shorewall
-    state: stopped
 
 - name: Plex library mounted
   mount:
@@ -21,7 +17,7 @@
     state: present
 
 - name: Sickchill & Deluge docker images
-  docker_service:
+  docker_compose:
     project_name: fragugliaserver
     pull: true
     restarted: true
@@ -97,6 +93,37 @@
             - /home/plex:/movies
             - /home/plex/transcode:/transcode
           restart: always
+        samba:
+          container_name: samba
+          restart: always
+          image: dperson/samba
+          volumes:
+            - /home:/mount
+          environment:
+            - NMBD=true
+            - PERMISSIONS=true
+            - SMB=true
+            - WORKGROUP=fraguglia.it
+            - USERID=20000
+            - GROUPID=20000
+            - SHARE=photo;/mount/photo;yes;no;no;riccardo,caroline;riccardo
+            - USER=riccardo;{{ riccardo_password }}
+            - USER2=caroline;{{ caroline_password }}
+            - GLOBAL=domain master = Yes
+            - GLOBAL2=ea support = Yes
+            - GLOBAL3=fruit:metadata = stream
+            - GLOBAL4=fruit:model = MacSamba
+            - GLOBAL5=delete veto files = true
+            - GLOBAL6=fruit:veto_appledouble = yes
+            - GLOBAL7=fruit:posix_rename = yes
+            - GLOBAL8=fruit:zero_file_id = yes
+            - GLOBAL9=fruit:wipe_intentionally_left_blank_rfork = yes
+            - GLOBAL10=fruit:delete_empty_adfiles = yes
+            - GLOBAL11=log file = /var/log/samba/log.%m
+            - GLOBAL12=server string = Penguin Power!
+            - GLOBAL13=use sendfile = Yes
+            - GLOBAL14=wins support = Yes
+          network_mode: host
 
 - name: Home for server0 exists
   file:

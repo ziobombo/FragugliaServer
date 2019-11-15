@@ -6,15 +6,6 @@
   retries: 10
   delay: 2
 
-- name: Apt keys
-  apt_key: url={{ item }} state=present
-  with_items:
-    - https://download.docker.com/linux/ubuntu/gpg
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
 - name: Update all packages to the latest version
   apt:
     upgrade: dist
@@ -31,6 +22,22 @@
     purge: yes
     name: ['oracle-java8-installer', 'oracle-java8-set-default','docker', 'docker-engine', 'docker.io', 'haveged', 'accountsservice', 'network-manager-gnome', 'network-manager']
 
+- name: Apt keys
+  apt_key: url={{ item }} state=present
+  with_items:
+    - https://download.docker.com/linux/ubuntu/gpg
+    - https://pkg.jenkins.io/debian/jenkins.io.key
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+    - deb https://pkg.jenkins.io/debian binary/
+
 - name: Base packages
   apt:
     name:
@@ -45,32 +52,16 @@
       - 'python-pip'
       - 'maven'
       - 'python-passlib'
-      - 'shorewall'
       - 'jenkins'
+      - 'libzfs2linux'
+      - 'zfs-doc'
+      - 'zfs-zed'
+      - 'zfsutils-linux'
     update_cache: yes
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
-
-- name: NVIDIA driver
-  apt:
-    name:
-      - 'nvidia-375'
-      - 'nvidia-modprobe'
-    update_cache: yes
-  when: ansible_nodename == "cubo"
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
-- name: Install Java 13
-  include_role:
-    name: gantsign.java
-  vars:
-    java_version: '13'
-    java_is_default_installation: yes
 
 - name: Install PhotoExport
   apt:
