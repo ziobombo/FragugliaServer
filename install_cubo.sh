@@ -1,5 +1,3 @@
 #! /bin/bash
 
-ansible-playbook -i servers.ini cubo.yml --ask-vault-pass
-
-
+ansible-playbook -v -i servers.ini cubo.yml --ask-vault-pass
