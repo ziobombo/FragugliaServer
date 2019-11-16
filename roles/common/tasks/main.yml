@@ -142,11 +142,6 @@
     state: stopped
     enabled: no
 
-- name: Stop Jenkins
-  service:
-    name: jenkins
-    state: stopped
-
 - name: Jenkins running with the good user
   lineinfile:
     path: /etc/default/jenkins
