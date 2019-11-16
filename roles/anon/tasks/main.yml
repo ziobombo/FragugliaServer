@@ -170,11 +170,23 @@
     regexp: '^listen-address 127'
     line: 'listen-address 192.168.3.1:1080'
 
+- name: Stop openvpn
+  service:
+    name: shorewall
+    state: stopped
+    enabled: yes
+
 - name: Restart service shorewall, in all cases
   service:
     name: shorewall
     state: restarted
     enabled: no
+
+- name: Start openvpn
+  service:
+    name: shorewall
+    state: started
+    enabled: yes
 
 - name: Allow 'server0' user to sudo execute docker passwordless
   lineinfile:
