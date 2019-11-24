@@ -125,13 +125,6 @@
             - GLOBAL14=wins support = Yes
           network_mode: host
 
-- name: Home for server0 exists
-  file:
-    path: /home/server0
-    owner: server0
-    group: server0
-    recurse: true
-    state: directory
 
 
 
