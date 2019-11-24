@@ -188,16 +188,12 @@
     state: started
     enabled: yes
 
-- name: Allow 'server0' user to sudo execute docker passwordless
+- name: Allow 'server0' user some sudo rights...
   lineinfile:
     dest: /etc/sudoers
     state: present
-    line: 'server0 ALL=NOPASSWD: /usr/bin/docker'
+    line: 'server0 ALL=NOPASSWD: {{ item }}'
     validate: 'visudo -cf %s'
-
-- name: Allow 'server0' user to sudo execute apt-get passwordless
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    line: 'server0 ALL=NOPASSWD: /usr/bin/apt-get'
-    validate: 'visudo -cf %s'
+  with_items:
+    - /usr/bin/docker
+    - /usr/bin/apt

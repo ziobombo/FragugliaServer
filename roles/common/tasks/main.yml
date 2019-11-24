@@ -110,33 +110,17 @@
     - { name: 'net.ipv6.conf.default.disable_ipv6', value: '1' }
     - { name: 'net.ipv6.conf.lo.disable_ipv6', value: '1' }
 
-- name: Allow 'server0' user to sudo execute chown passwordless
+- name: Allow 'server0' to do things...
   lineinfile:
     dest: /etc/sudoers
     state: present
-    line: 'server0 ALL=NOPASSWD: /bin/chown'
+    line: 'server0 ALL=NOPASSWD: {{ item }}'
     validate: 'visudo -cf %s'
-
-- name: Allow 'jenkins' user to sudo as user photo passwordless
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    line: 'jenkins ALL=(photo) NOPASSWD: ALL'
-    validate: 'visudo -cf %s'
-
-- name: Allow 'server0' user to sudo command find passwordless
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    line: 'server0 ALL=NOPASSWD: /usr/bin/find'
-    validate: 'visudo -cf %s'
-
-- name: Allow 'jenkins' user to sudo command rsync as server0 passwordless
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    line: 'jenkins ALL=(server0) NOPASSWD: /usr/bin/rsync'
-    validate: 'visudo -cf %s'
+  with_items:
+    - /usr/bin/apt
+    - /bin/chown
+    - /usr/bin/find
+    - /usr/bin/docker
 
 - name: Disable iscsid
   service:
@@ -156,6 +140,18 @@
     regexp: '^JENKINS_GROUP'
     line: 'JENKINS_GROUP=server0'
 
+- name: Jenkins optim 1
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^JENKINS_ARGS'
+    line: 'JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpPort=$HTTP_PORT --handlerCountMax=30 --handlerCountMaxIdle=20"'
+
+- name: Jenkins optim 2
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: '^JAVA_ARGS'
+    line: 'JAVA_ARGS="-Xmx128m -Djava.awt.headless=true -XX:+UseCompressedOops -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC  -XX:+UnlockExperimentalVMOptions"'
+
 - name: Jenkins pointing to the right home
   lineinfile:
     path: /etc/default/jenkins
@@ -172,4 +168,4 @@
 - name: Jenkins started
   service:
     name: jenkins
-    state: started
+    state: restarted
