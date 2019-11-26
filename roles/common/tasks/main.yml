@@ -168,4 +168,4 @@
 - name: Jenkins started
   service:
     name: jenkins
-    state: restarted
+    state: started
