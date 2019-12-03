@@ -52,6 +52,7 @@
       - 'zfs-zed'
       - 'zfsutils-linux'
       - 'fail2ban'
+      - 'telegraf'
     update_cache: yes
   register: task_result
   until: task_result is success
@@ -169,3 +170,16 @@
   service:
     name: jenkins
     state: started
+
+- name: Template a file to /etc/telegraf/telegraf.conf
+  template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Telegraf restarted
+  service:
+    name: telegraf
+    state: restarted

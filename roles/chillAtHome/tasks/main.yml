@@ -124,6 +124,28 @@
             - GLOBAL13=use sendfile = Yes
             - GLOBAL14=wins support = Yes
           network_mode: host
+        influxdb:
+          image: influxdb:latest
+          container_name: influxdb
+          network_mode:
+            host
+          volumes:
+            - /home/server0/configuration/InfluxDB:/var/lib/influxdb
+          restart:
+            always
+          user: 
+            20000:20000
+        grafana:
+          image: grafana/grafana
+          container_name: grafana
+          network_mode:
+            host
+          volumes:
+            - /home/server0/configuration/Grafana:/var/lib/grafana
+          restart:
+            always
+          user:
+            20000:20000
 
 
 
