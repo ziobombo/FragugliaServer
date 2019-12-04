@@ -176,7 +176,7 @@
 - name: Template a file to /etc/telegraf/telegraf.conf
   template:
     src: telegraf.conf.j2
-    dest: /etc/telegraf.conf
+    dest: /etc/telegraf/telegraf.conf
     owner: root
     group: root
     mode: '0644'
