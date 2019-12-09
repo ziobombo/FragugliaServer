@@ -110,7 +110,7 @@
             - GUID=20000
             - TZ=Europe/Paris
             - URL=fraguglia.it
-            - SUBDOMAINS=anon,bitwarden,sickchill,deluge,plex,radarr,sonarr,jenkins,jackett,
+            - SUBDOMAINS=anon,bitwarden,deluge,plex,radarr,sonarr,jenkins,jackett,grafana,
             - VALIDATION=http
             - EMAIL=riccardo.casazza@gmail.com
             - DHLEVEL=2048
@@ -119,7 +119,15 @@
           volumes:
             - /home/server0/configuration/LetsEncrypt:/config
           network_mode: host
-
+        bitwarden:
+          image: mprasil/bitwarden
+          container_name: bitwarden
+          restart: always
+          ports:
+            - 81:80
+          volumes:
+            - /home/server0/configuration/BitWarden:/data:rw
+          
 - name: Server0 home existing and with right rights
   file:
     path: /home/server0
