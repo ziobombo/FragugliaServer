@@ -19,6 +19,7 @@
   with_items:
     - https://download.docker.com/linux/ubuntu/gpg
     - https://pkg.jenkins.io/debian/jenkins.io.key
+    - https://repos.influxdata.com/influxdb.key
   register: task_result
   until: task_result is success
   retries: 10
@@ -29,6 +30,7 @@
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     - deb https://pkg.jenkins.io/debian binary/
+    - deb https://repos.influxdata.com/debian stretch stable
 
 - name: Base packages
   apt:
@@ -174,7 +176,7 @@
 - name: Template a file to /etc/telegraf/telegraf.conf
   template:
     src: telegraf.conf.j2
-    dest: /etc/telegraf.conf
+    dest: /etc/telegraf/telegraf.conf
     owner: root
     group: root
     mode: '0644'
