@@ -51,15 +51,6 @@
   retries: 10
   delay: 2
 
-- name: Install openvpn-as
-  apt:
-    state=present
-    deb=https://swupdate.openvpn.org/as/openvpn-as-2.6.1-Ubuntu16.amd_64.deb
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
 - name: docker-py (pip)
   pip:
     name: ['pip', 'docker', 'docker-compose==1.24.0-rc1']
@@ -127,6 +118,19 @@
             - 81:80
           volumes:
             - /home/server0/configuration/BitWarden:/data:rw
+        openvpn-as:
+          image: linuxserver/openvpn-as
+          container_name: openvpn-as
+          cap_add:
+            - NET_ADMIN
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/OpenVPN-AS:/config
+          network_mode: host
+          restart: always
           
 - name: Server0 home existing and with right rights
   file:
@@ -178,23 +182,11 @@
     regexp: '^listen-address 127'
     line: 'listen-address 192.168.3.1:1080'
 
-- name: Stop openvpn
-  service:
-    name: shorewall
-    state: stopped
-    enabled: yes
-
 - name: Restart service shorewall, in all cases
   service:
     name: shorewall
     state: restarted
     enabled: no
-
-- name: Start openvpn
-  service:
-    name: shorewall
-    state: started
-    enabled: yes
 
 - name: Allow 'server0' user some sudo rights...
   lineinfile:
