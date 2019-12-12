@@ -116,6 +116,7 @@
           restart: always
           ports:
             - 81:80
+            - 8012:8012
           volumes:
             - /home/server0/configuration/BitWarden:/data:rw
         openvpn-as:
