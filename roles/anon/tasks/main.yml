@@ -116,7 +116,8 @@
           restart: always
           ports:
             - 81:80
-            - 8012:8012
+            - 3012:3012
+          network_mode: bridge
           volumes:
             - /home/server0/configuration/BitWarden:/data:rw
         openvpn-as:
