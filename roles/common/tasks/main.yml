@@ -53,6 +53,7 @@
       - 'zfs-doc'
       - 'zfs-zed'
       - 'zfsutils-linux'
+      - 'zfs-auto-snapshot'
       - 'fail2ban'
       - 'telegraf'
     update_cache: yes
@@ -185,3 +186,15 @@
   service:
     name: telegraf
     state: restarted
+
+- name: Create a new file system called myfs in pool rpool with the setuid property turned off
+  zfs:
+    name: rpool/myfs
+    state: present
+    extra_zfs_properties:
+      - com.sun:auto-snapshot: true
+      - com.sun:auto-snapshot:monthly: false
+      - com.sun:auto-snapshot:weekly: false
+      - com.sun:auto-snapshot:daily: true
+      - com.sun:auto-snapshot:hourly: false
+      - com.sun:auto-snapshot:frequent: false
