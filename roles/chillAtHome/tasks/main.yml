@@ -94,6 +94,15 @@
             - /home/plex:/movies
             - /home/plex/transcode:/transcode
           restart: always
+        homeassistant:
+          container_name: home-assistant
+          image: homeassistant/home-assistant:stable
+          volumes:
+            - /home/server0/configuration/HASS:/config
+          environment:
+            - TZ=Europe/Paris
+          restart: always
+          network_mode: host
         samba:
           container_name: samba
           restart: always
