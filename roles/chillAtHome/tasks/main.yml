@@ -90,7 +90,7 @@
             - VERSION=docker
           volumes:
             - /home/plex:/config
-            - /home/plex/tvshow:/tv
+            - /home/plex/tvshows:/tv
             - /home/plex:/movies
             - /home/plex/transcode:/transcode
           restart: always
