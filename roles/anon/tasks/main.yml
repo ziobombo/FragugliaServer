@@ -133,7 +133,7 @@
             - /home/server0/configuration/OpenVPN-AS:/config
           network_mode: host
           restart: always
-          
+
 - name: Server0 home existing and with right rights
   file:
     path: /home/server0
@@ -182,7 +182,13 @@
   lineinfile:
     path: /etc/privoxy/config
     regexp: '^listen-address 127'
+    state: absent
+
+- name: Privoxy setup/2
+  lineinfile:
+    path: /etc/privoxy/config
     line: 'listen-address 192.168.3.1:1080'
+    state: present
 
 - name: Restart service shorewall, in all cases
   service:
