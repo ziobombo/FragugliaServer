@@ -111,7 +111,7 @@
             - /home/server0/configuration/LetsEncrypt:/config
           network_mode: host
         bitwarden:
-          image: mprasil/bitwarden
+          image: bitwardenrs/server
           container_name: bitwarden
           restart: always
           ports:
