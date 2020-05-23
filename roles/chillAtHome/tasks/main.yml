@@ -79,7 +79,7 @@
             - /home/plex/tvshows:/tv
             - /home/server0/temp/t_downloads:/downloads
           network_mode: host
-          restart: 
+          restart: always
         lidarr:
           image: linuxserver/lidarr
           container_name: lidarr
