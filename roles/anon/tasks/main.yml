@@ -129,6 +129,7 @@
             - PUID=20000
             - PGID=20000
             - TZ=Europe/Paris
+            - INTERFACE=ens3
           volumes:
             - /home/server0/configuration/OpenVPN-AS:/config
           network_mode: host
@@ -205,3 +206,4 @@
   with_items:
     - /usr/bin/docker
     - /usr/bin/apt
+    - /bin/journalctl

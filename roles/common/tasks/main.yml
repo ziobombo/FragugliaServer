@@ -125,6 +125,7 @@
     - /bin/chown
     - /usr/bin/find
     - /usr/bin/docker
+    - /bin/journalctl
 
 - name: Disable iscsid
   service:
