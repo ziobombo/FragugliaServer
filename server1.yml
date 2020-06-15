@@ -5,3 +5,5 @@
   become_method: sudo
 
   roles:
+    - minimal_rasp_pi
+    - deconz
