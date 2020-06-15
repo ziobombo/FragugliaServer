@@ -1,5 +1,5 @@
 ---
-- hosts: server0_mini
+- hosts: server0
   remote_user: root
   become: true
   become_method: sudo
