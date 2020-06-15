@@ -1,0 +1,31 @@
+- name: Apt keys
+  apt_key: url={{ item }} state=present
+  with_items:
+    - http://phoscon.de/apt/deconz.pub.key
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - deb http://phoscon.de/apt/deconz buster main
+
+- name: Install Deconz
+  apt:
+    name:
+    - 'deconz'
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Deconz started
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - deconz
+    - deconz-init
+    - deconz-update
+    - deconz-wifi

@@ -1,0 +1,13 @@
+- name: Unuseful services
+  service: name={{ item }} state=stopped enabled=no
+  with_items:
+    - rng-tools
+    - unattended-upgrades
+    - polkit
+    - wpa_supplicant
+    - avahi-daemon
+    - triggerhappy
+    - alsa-restore
+    - alsa-state
+    - alsa-utils
+    - dhcpcd
