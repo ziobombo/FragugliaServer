@@ -101,7 +101,7 @@
             - GUID=20000
             - TZ=Europe/Paris
             - URL=fraguglia.it
-            - SUBDOMAINS=anon,bitwarden,deluge,plex,radarr,sonarr,lidarr,jenkins,jackett,grafana,hass,
+            - SUBDOMAINS=anon,bitwarden,deluge,plex,radarr,sonarr,lidarr,jenkins,jackett,grafana,hass,gotify,
             - VALIDATION=http
             - EMAIL=riccardo.casazza@gmail.com
             - DHLEVEL=2048
@@ -134,6 +134,13 @@
             - /home/server0/configuration/OpenVPN-AS:/config
           network_mode: host
           restart: always
+        gotify:
+          image: gotify/server
+          container_name: gotify
+          ports:
+            - 12345:80
+          volumes:
+            - /home/server0/configuration/Gotify:/app/data
 
 - name: Server0 home existing and with right rights
   file:
