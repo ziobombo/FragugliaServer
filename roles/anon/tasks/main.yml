@@ -137,11 +137,11 @@
         gotify:
           image: gotify/server
           container_name: gotify
-          ports:
-            - 12345:80
+          network_mode: host
+          environment:
+            - GOTIFY_SERVER_PORT=7070
           volumes:
             - /home/server0/configuration/Gotify:/app/data
-
 - name: Server0 home existing and with right rights
   file:
     path: /home/server0
