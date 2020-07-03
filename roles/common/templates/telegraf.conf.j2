@@ -28,3 +28,13 @@
 [[inputs.processes]]
 [[inputs.swap]]
 [[inputs.system]]
+[[inputs.ping]]
+  interval = "60s"
+  urls = ["8.8.8.8","8.8.4.4"]
+  method = "exec"
+[[inputs.exec]]
+  interval = "86400s"
+  commands = ["/usr/local/bin/speedtest-cli --json"]
+  timeout = "60s"
+  data_format = "json"
+  name_suffix = "_speedtest"
