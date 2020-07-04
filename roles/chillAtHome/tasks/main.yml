@@ -80,20 +80,6 @@
             - /home/server0/temp/t_downloads:/downloads
           network_mode: host
           restart: always
-        lidarr:
-          image: linuxserver/lidarr
-          container_name: lidarr
-          environment:
-            - PUID=20000
-            - PGID=20000
-            - UMASK_SET=022
-            - TZ=Europe/Paris
-          volumes:
-            - /home/server0/configuration/Lidarr:/config
-            - /home/plex/music:/music
-            - /home/server0/temp/t_downloads:/downloads
-          network_mode: host
-          restart: always
         plex:
           image: linuxserver/plex
           container_name: plex
