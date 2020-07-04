@@ -33,8 +33,8 @@
   urls = ["8.8.8.8","8.8.4.4"]
   method = "exec"
 [[inputs.exec]]
-  interval = "86400s"
-  commands = ["/usr/local/bin/speedtest-cli --json"]
+  interval = "3600s"
+  commands = ["/usr/bin/speedtest-cli --json"]
   timeout = "60s"
   data_format = "json"
   name_suffix = "_speedtest"
