@@ -5,7 +5,7 @@
     path: /var/lib/plexmediaserver/Library
     src: /home/plex/Library
     fstype: none
-    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
+    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=docker.service
     state: present
 
 - name: Plex tvshow library mounted
@@ -13,8 +13,13 @@
     path: /home/server0/data/Library/tvshows
     src: /home/plex/tvshows
     fstype: none
-    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=plexmediaserver.service
+    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=docker.service
     state: present
+
+- name: Create plex transcode scratch dir
+  file: path={{ item }} owner=server0 group=server0 recurse=true state=directory
+  with_items:
+    - /var/scratch/plex_transcode
 
 - name: Sickchill & Deluge docker images
   docker_compose:
@@ -92,7 +97,7 @@
             - /home/plex:/config
             - /home/plex/tvshows:/tv
             - /home/plex:/movies
-            - /home/plex/transcode:/transcode
+            - /var/scratch/plex_transcode:/transcode
           restart: always
         homeassistant:
           container_name: home-assistant
