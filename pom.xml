@@ -4,7 +4,7 @@
  
     <groupId>it.fraguglia</groupId>
     <artifactId>FragugliaServer</artifactId>
-    <version>8.8.37-SNAPSHOT</version>
+    <version>8.8.38-SNAPSHOT</version>
  
     <build>
         <plugins>
