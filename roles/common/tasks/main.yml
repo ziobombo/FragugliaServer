@@ -183,6 +183,12 @@
     group: root
     mode: '0644'
 
+- name: telegraf user to group docker
+  user:
+    name: 'telegraf'
+    groups: docker
+    append: yes
+
 - name: Telegraf restarted
   service:
     name: telegraf
