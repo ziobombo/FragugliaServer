@@ -1,0 +1,15 @@
+- name: Docker images
+  docker_compose:
+    project_name: fragugliaserver
+    pull: yes
+    restarted: yes
+    definition:
+      version: '3.7'
+      services:
+        crontab-ui:
+          build: .
+          image: alseambusher/crontab-ui
+          network_mode: bridge
+          ports:
+            - 8000:8000
+            
