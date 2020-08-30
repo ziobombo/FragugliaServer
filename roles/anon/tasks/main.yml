@@ -90,9 +90,9 @@
     definition:
       version: '3.7'
       services:
-        letsencrypt:
-          image: linuxserver/letsencrypt
-          container_name: letsencrypt
+        swag:
+          image: linuxserver/swag
+          container_name: swag
           restart: always
           cap_add:
             - ALL
