@@ -122,6 +122,7 @@
             - USERID=20000
             - GROUPID=20000
             - SHARE=photo;/mount/photo;yes;no;no;riccardo,caroline;riccardo
+            - SHARE2=plex;/mount/plex;yes;no;no;server0;server0
             - USER=riccardo;{{ riccardo_password }}
             - USER2=caroline;{{ caroline_password }}
             - GLOBAL=domain master = Yes
