@@ -1,0 +1,43 @@
+- name: Apt keys
+  apt_key: url={{ item }} state=present
+  with_items:
+    - https://repos.influxdata.com/influxdb.key
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - deb https://repos.influxdata.com/debian stretch stable
+
+- name: Base packages
+  apt:
+    name:
+      - 'speedtest-cli'
+      - 'telegraf'
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Template a file to /etc/telegraf/telegraf.conf
+  template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: telegraf user to group docker
+  user:
+    name: 'telegraf'
+    groups: docker
+    append: yes
+
+- name: Telegraf restarted
+  service:
+    name: telegraf
+    state: restarted
