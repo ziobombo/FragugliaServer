@@ -3,6 +3,10 @@
   remote_user: root
   become: true
   become_method: sudo
+  vars: 
+    influxdb_ip: '192.168.2.2'
+    influxdb_hostname: server0
 
   roles:
     - anon
+    - monitoring
