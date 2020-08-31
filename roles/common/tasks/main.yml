@@ -55,7 +55,6 @@
       - 'zfsutils-linux'
       - 'zfs-auto-snapshot'
       - 'fail2ban'
-      - 'telegraf'
     update_cache: yes
   register: task_result
   until: task_result is success
@@ -174,22 +173,3 @@
   service:
     name: jenkins
     state: started
-
-- name: Template a file to /etc/telegraf/telegraf.conf
-  template:
-    src: telegraf.conf.j2
-    dest: /etc/telegraf/telegraf.conf
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: telegraf user to group docker
-  user:
-    name: 'telegraf'
-    groups: docker
-    append: yes
-
-- name: Telegraf restarted
-  service:
-    name: telegraf
-    state: restarted
