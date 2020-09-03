@@ -197,6 +197,11 @@
     path: /etc/privoxy/config
     line: 'listen-address 192.168.3.1:1080'
     state: present
+- name: Restart service privoxy, in all cases
+    service:
+      name: privoxy
+      state: restarted
+      enabled: yes
 
 - name: Restart service shorewall, in all cases
   service:
