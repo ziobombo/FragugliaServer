@@ -186,17 +186,14 @@
 - name: Docker support in Shorewall
   lineinfile: path=/etc/shorewall/shorewall.conf line='DOCKER=Yes'
 
-- name: Privoxy setup
-  lineinfile:
-    path: /etc/privoxy/config
-    regexp: '^listen-address 127'
-    state: absent
+- name: privoxy config file
+  template:
+    src: config.j2
+    dest: /etc/privoxy/config
+    owner: root
+    group: root
+    mode: '0644'
 
-- name: Privoxy setup/2
-  lineinfile:
-    path: /etc/privoxy/config
-    line: 'listen-address 192.168.3.1:1080'
-    state: present
 - name: Restart service privoxy, in all cases
   service:
     name: privoxy
