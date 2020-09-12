@@ -108,20 +108,6 @@
             - TZ=Europe/Paris
           restart: always
           network_mode: host
-        airsonic:
-          image: linuxserver/airsonic
-          container_name: airsonic
-          environment:
-            - PUID=20000
-            - PGID=20000
-            - TZ=Europe/Paris
-          volumes:
-            - /home/server0/configuration/Airsonic:/config
-            - /home/plex/music:/music
-            - /home/plex/playlists:/playlists
-            - /home/plex/podcasts:/podcasts
-          restart: always
-          network_mode: host
         samba:
           container_name: samba
           restart: always
