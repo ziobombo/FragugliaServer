@@ -1,11 +1,11 @@
 ---
-- hosts: server1
+- hosts: cubetto
   remote_user: root
   become: true
   become_method: sudo
   vars: 
     influxdb_ip: '192.168.0.116'
-    influxdb_hostname: server1
+    influxdb_hostname: cubetto
 
   roles:
     - monitoring
