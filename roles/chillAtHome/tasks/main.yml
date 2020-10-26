@@ -114,6 +114,7 @@
             - GROUPID=20000
             - SHARE=photo;/mount/photo;yes;no;no;riccardo,caroline;riccardo
             - SHARE2=plex;/mount/plex;yes;no;no;riccardo;riccardo
+            - SHARE3=photos;/mount/photos;yes;no;no;riccardo,caroline;riccardo
             - USER=riccardo;{{ riccardo_password }}
             - USER2=caroline;{{ caroline_password }}
             - GLOBAL=domain master = Yes
