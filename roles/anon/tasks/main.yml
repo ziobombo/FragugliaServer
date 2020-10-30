@@ -199,6 +199,10 @@
     name: privoxy
     state: restarted
     enabled: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Restart service shorewall, in all cases
   service:
