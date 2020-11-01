@@ -154,6 +154,18 @@
             always
           user:
             20000:20000
+        mariadb:
+          image: linuxserver/mariadb
+          container_name: mariadb
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - MYSQL_ROOT_PASSWORD={{ server0_password }}
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/MariaDB:/config
+          network_mode: host
+          restart: always
 
 
 
