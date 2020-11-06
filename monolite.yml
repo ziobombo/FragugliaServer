@@ -1,15 +1,13 @@
 ---
-- hosts: cubetto
+- hosts: monolite
   remote_user: root
   become: true
   become_method: sudo
   vars: 
-    influxdb_ip: '192.168.0.116'
-    influxdb_hostname: cubetto
+    influxdb_ip: 'cubo'
+    influxdb_hostname: monolite
     influxdb_internet_connection: false
     influxdb_has_docker: false
 
   roles:
     - monitoring
-    - minimal_rasp_pi
-    - deconz

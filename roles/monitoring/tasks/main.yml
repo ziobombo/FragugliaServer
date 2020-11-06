@@ -36,6 +36,7 @@
     name: 'telegraf'
     groups: docker
     append: yes
+  when: influxdb_has_docker == 'true'
 
 - name: Telegraf restarted
   service:

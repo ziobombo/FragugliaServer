@@ -92,12 +92,13 @@
           environment:
             - PUID=20000
             - PGID=20000
-            - VERSION=docker
+            - VERSION=latest
           volumes:
             - /home/plex:/config
             - /home/plex/tvshows:/tv
             - /home/plex:/movies
             - /var/scratch/plex_transcode:/transcode
+            - /var/scratch/plex_transcode_tmp:/tmp
           restart: always
         samba:
           container_name: samba

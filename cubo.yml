@@ -5,7 +5,8 @@
   vars: 
     influxdb_ip: '127.0.0.1'
     influxdb_hostname: 'cubo'
-    
+    influxdb_internet_connection: true
+    influxdb_has_docker: true
 
   roles:
     - common
