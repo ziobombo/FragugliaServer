@@ -41,7 +41,6 @@
             - /home/server0/configuration/Deluge:/config
             - /home/server0/temp/t_downloads:/downloads
             - /home/plex:/downloads/movies
-            - /opt/deluge_incomplete:/downloads/incomplete
           network_mode: host
           restart: always
         jackett:
