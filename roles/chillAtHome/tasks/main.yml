@@ -115,6 +115,8 @@
             - SHARE=photo;/mount/photo;yes;no;no;riccardo,caroline;riccardo
             - SHARE2=plex;/mount/plex;yes;no;no;riccardo;riccardo
             - SHARE3=photos;/mount/photos;yes;no;no;riccardo,caroline;riccardo
+            - SHARE4=downloads;/mount/server0/temp/t_downloads/complete;yes;no;no;riccardo;riccardo
+            - SHARE5=magnets;/mount/server0/temp/ja_downloads;yes;no;no;riccardo;riccardo
             - USER=riccardo;{{ riccardo_password }}
             - USER2=caroline;{{ caroline_password }}
             - GLOBAL=domain master = Yes
