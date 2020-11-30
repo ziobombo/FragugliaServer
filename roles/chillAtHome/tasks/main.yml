@@ -169,6 +169,19 @@
             - /home/server0/configuration/MariaDB:/config
           network_mode: host
           restart: always
+        piwigo:
+          image: linuxserver/piwigo
+          container_name: piwigo
+          environment:
+            - PUID=20000
+            - PGID=20000
+            - TZ=Europe/Paris
+          volumes:
+            - /home/server0/configuration/Piwigo:/config
+            - /home/photos/Gallery:/config/www/gallery/galleries
+          ports:
+            - 10080:80
+          restart: always
 
 
 

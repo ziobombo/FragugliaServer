@@ -28,7 +28,7 @@
 - name: Apt repos
   apt_repository: repo={{ item }} state=present
   with_items:
-    - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
     - deb https://pkg.jenkins.io/debian binary/
     - deb https://repos.influxdata.com/debian stretch stable
 
@@ -43,14 +43,12 @@
       - 'software-properties-common'
       - 'docker-ce'
       - 'htop'
-      - 'python-pip'
       - 'python3-pip'
       - 'maven'
       - 'python-passlib'
       - 'openvpn'
       - 'jenkins'
       - 'libzfs2linux'
-      - 'zfs-doc'
       - 'zfs-zed'
       - 'zfsutils-linux'
       - 'zfs-auto-snapshot'
