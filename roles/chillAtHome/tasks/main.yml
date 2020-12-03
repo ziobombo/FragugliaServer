@@ -1,27 +1,11 @@
 ---
 
-- name: Plex library mounted
-  mount:
-    path: /var/lib/plexmediaserver/Library
-    src: /home/plex/Library
-    fstype: none
-    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=docker.service
-    state: present
-
-- name: Plex tvshow library mounted
-  mount:
-    path: /home/server0/data/Library/tvshows
-    src: /home/plex/tvshows
-    fstype: none
-    opts: bind,x-systemd.requires=zfs-mount.service,x-systemd.before=docker.service
-    state: present
-
 - name: Create plex transcode scratch dir
   file: path={{ item }} owner=server0 group=server0 recurse=true state=directory
   with_items:
     - /var/scratch/plex_transcode
 
-- name: Sickchill & Deluge docker images
+- name: Chill
   docker_compose:
     project_name: fragugliaserver
     pull: true

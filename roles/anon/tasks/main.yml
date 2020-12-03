@@ -32,6 +32,7 @@
 - name: Base packages
   apt:
     name:
+      - 'ansible'
       - 'default-jre'
       - 'vim'
       - 'privoxy'
