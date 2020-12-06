@@ -10,5 +10,6 @@
     influxdb_has_docker: true
 
   roles:
+    - base
     - anon
     - monitoring

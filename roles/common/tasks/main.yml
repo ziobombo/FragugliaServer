@@ -86,20 +86,6 @@
   retries: 10
   delay: 2
 
-- name: Ensure group "server0" exists
-  group:
-    name: server0
-    state: present
-    gid: 20000
-
-- name: Ensure user "server0" exists
-  user:
-    name: server0
-    uid: 20000
-    group: server0
-    home: /home/server0
-    shell: /bin/bash
-
 - name: Variables in sysctl
   sysctl:
     name: "{{ item.name }}"

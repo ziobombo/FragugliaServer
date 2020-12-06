@@ -10,6 +10,7 @@
     influxdb_has_docker: false
 
   roles:
+    - base
     - monitoring
     - minimal_rasp_pi
     - deconz
