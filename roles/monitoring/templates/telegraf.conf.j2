@@ -49,3 +49,10 @@
   interval = "5m"
   endpoint = "unix:///var/run/docker.sock"
 {% endif %}
+[[inputs.exec]]
+  commands = [ "iperf3 -c {{influxdb_ip}} --json" ]
+  interval = "3600s"
+  timeout = "15s"
+  data_format = "json"
+  json_query = "end"
+  name_suffix = "_iperf"
