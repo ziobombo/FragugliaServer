@@ -28,7 +28,7 @@
 [[inputs.mem]]
 [[inputs.swap]]
 [[inputs.system]]
-{% if influxdb_internet_connection == 'true' %}
+{% if influxdb_internet_connection == true %}
 [[inputs.ping]]
   interval = "60s"
   urls = ["8.8.8.8"]
@@ -44,7 +44,7 @@
   servers = ["127.0.0.53"]
   domains = ["www.google.com"]
 {% endif %}
-{% if influxdb_has_docker == 'true' %}
+{% if influxdb_has_docker == true %}
 [[inputs.docker]]
   interval = "5m"
   endpoint = "unix:///var/run/docker.sock"
