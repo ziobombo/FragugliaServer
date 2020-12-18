@@ -97,7 +97,7 @@
             - WORKGROUP=fraguglia.it
             - USERID=20000
             - GROUPID=20000
-            - SHARE=magnets;/mount/server0/temp/ja_downloads;yes;no;no;riccardo;riccardo
+            - SHARE=backup;/home/backup;yes;no;no;riccardo;riccardo
             - SHARE2=plex;/mount/plex;yes;no;no;riccardo;riccardo
             - SHARE3=photos;/mount/photos;yes;no;no;riccardo,caroline;riccardo
             - SHARE4=downloads;/mount/server0/temp/t_downloads/complete;yes;no;no;riccardo;riccardo
