@@ -117,6 +117,8 @@
             - GLOBAL12=server string = Penguin Power!
             - GLOBAL13=use sendfile = Yes
             - GLOBAL14=wins support = Yes
+            - GLOBAL15=vfs objects = fruit streams_xattr
+            - GLOBAL16=fruit:time machine = yes
           network_mode: host
         influxdb:
           image: influxdb:latest
