@@ -124,7 +124,7 @@
           image: influxdb:latest
           container_name: influxdb
           ports:
-            - "8888:8888"
+            - "8086:8086"
           volumes:
             - /home/server0/configuration/InfluxDB:/var/lib/influxdb
           restart:
