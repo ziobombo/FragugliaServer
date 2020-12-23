@@ -136,8 +136,8 @@
           environment:
             INFLUXDB_URL: http://influxdb:8086
             KAPACITOR_URL: http://kapacitor:9092
-          network_mode:
-            host
+          ports:
+            - "8888:8888"
           links:
             - influxdb
             - kapacitor
@@ -148,8 +148,8 @@
             KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
           links:
             - influxdb
-          network_mode:
-            host
+          ports:
+            - "9092:9092"
         grafana:
           image: grafana/grafana
           container_name: grafana
