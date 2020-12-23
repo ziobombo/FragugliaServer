@@ -133,6 +133,7 @@
             20000:20000
         chronograf:
           image: chronograf:latest
+          container_name: chronograf
           environment:
             INFLUXDB_URL: http://influxdb:8086
             KAPACITOR_URL: http://kapacitor:9092
@@ -143,6 +144,7 @@
             - kapacitor
         kapacitor:
           image: kapacitor:latest
+          container_name: kapacitor
           environment:
             KAPACITOR_HOSTNAME: kapacitor
             KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
