@@ -72,7 +72,7 @@
         plex:
           image: linuxserver/plex
           container_name: plex
-          network_mode: host
+          network_mode: bridge
           environment:
             - PUID=20000
             - PGID=20000
