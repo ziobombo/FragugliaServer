@@ -161,6 +161,7 @@
         - { action: ACCEPT, source: all, dest: "$FW", proto: "tcp", dest_port: "http,https" }
         - { action: ACCEPT, source: vpn, dest: "$FW", proto: "tcp,udp", dest_port: 1080 }
         - { action: ACCEPT, source: all, dest: "$FW", proto: "udp", dest_port: 1194 }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "udp", dest_port: 22124 }
         - { action: ACCEPT, source: net, dest: "$FW", proto: icmp, dest_port: echo-request }
     shorewall_zones:
       - { zone: fw, type: firewall }
