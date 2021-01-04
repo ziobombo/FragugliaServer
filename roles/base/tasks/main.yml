@@ -17,6 +17,7 @@
     name:
       - 'openjdk-11-jdk-headless'
       - 'iperf3'
+      - 'sysfsutils'
     update_cache: yes
   register: task_result
   until: task_result is success

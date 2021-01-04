@@ -88,7 +88,7 @@
             - GUID=20000
             - TZ=Europe/Paris
             - URL=fraguglia.it
-            - SUBDOMAINS=anon,bitwarden,deluge,gotify,grafana,jackett,jenkins,plex,radarr,sonarr,photos,
+            - SUBDOMAINS=anon,bitwarden,deluge,gotify,grafana,jackett,jenkins,plex,radarr,sonarr,photos,metrics,
             - VALIDATION=http
             - EMAIL=riccardo.casazza@gmail.com
             - DHLEVEL=2048
@@ -129,6 +129,28 @@
             - GOTIFY_SERVER_PORT=7070
           volumes:
             - /home/server0/configuration/Gotify:/app/data
+        influxdb:
+          image: influxdb:latest
+          container_name: influxdb
+          ports:
+            - "8086:8086"
+          volumes:
+            - /home/server0/configuration/InfluxDB:/var/lib/influxdb
+          restart:
+            always
+          user: 
+            20000:20000
+        grafana:
+          image: grafana/grafana
+          container_name: grafana
+          network_mode:
+            host
+          volumes:
+            - /home/server0/configuration/Grafana:/var/lib/grafana
+          restart:
+            always
+          user:
+            20000:20000
 - name: Server0 home existing and with right rights
   file:
     path: /home/server0

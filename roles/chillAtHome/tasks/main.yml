@@ -120,49 +120,6 @@
             - GLOBAL15=vfs objects = fruit streams_xattr
             - GLOBAL16=fruit:time machine = yes
           network_mode: host
-        influxdb:
-          image: influxdb:latest
-          container_name: influxdb
-          ports:
-            - "8086:8086"
-          volumes:
-            - /home/server0/configuration/InfluxDB:/var/lib/influxdb
-          restart:
-            always
-          user: 
-            20000:20000
-        chronograf:
-          image: chronograf:latest
-          container_name: chronograf
-          environment:
-            INFLUXDB_URL: http://influxdb:8086
-            KAPACITOR_URL: http://kapacitor:9092
-          ports:
-            - "8888:8888"
-          links:
-            - influxdb
-            - kapacitor
-        kapacitor:
-          image: kapacitor:latest
-          container_name: kapacitor
-          environment:
-            KAPACITOR_HOSTNAME: kapacitor
-            KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
-          links:
-            - influxdb
-          ports:
-            - "9092:9092"
-        grafana:
-          image: grafana/grafana
-          container_name: grafana
-          network_mode:
-            host
-          volumes:
-            - /home/server0/configuration/Grafana:/var/lib/grafana
-          restart:
-            always
-          user:
-            20000:20000
         mariadb:
           image: linuxserver/mariadb
           container_name: mariadb
