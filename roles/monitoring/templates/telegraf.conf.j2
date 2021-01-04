@@ -12,7 +12,9 @@
   omit_hostname = false
   logfile = "/var/log/telegraf/telegraf.log"
 [[outputs.influxdb]]
-  urls = ["http://{{influxdb_ip}}:8086"]
+  urls = ["https://metrics.fraguglia.it"]
+  username = "server0"
+  password = "{{server0_password}}"
 [[inputs.cpu]]
   percpu = false
   totalcpu = true

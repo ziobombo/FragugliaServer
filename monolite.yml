@@ -4,7 +4,6 @@
   become: true
   become_method: sudo
   vars: 
-    influxdb_ip: 'cubo'
     influxdb_hostname: monolite
     influxdb_internet_connection: false
     influxdb_has_docker: false

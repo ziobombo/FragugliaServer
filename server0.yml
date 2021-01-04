@@ -4,7 +4,6 @@
   become: true
   become_method: sudo
   vars: 
-    influxdb_ip: '192.168.2.2'
     influxdb_hostname: server0
     influxdb_internet_connection: true
     influxdb_has_docker: false
