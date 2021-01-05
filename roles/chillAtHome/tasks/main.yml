@@ -50,7 +50,8 @@
             - UMASK_SET=022
             - TZ=Europe/Paris
           volumes:
-            - /home/server0/configuration/Radarr:/config
+            - /opt/configuration/Radarr:/config
+            - /home/backup/Radarr:/backup
             - /home/server0/temp/t_downloads:/downloads
             - /home/plex:/movies
           network_mode: host
@@ -64,7 +65,8 @@
             - UMASK_SET=022
             - TZ=Europe/Paris
           volumes:
-            - /home/server0/configuration/Sonarr:/config
+            - /opt/configuration/Sonarr:/config
+            - /home/backup/Sonarr:/backup
             - /home/plex/tvshows:/tv
             - /home/server0/temp/t_downloads:/downloads
           network_mode: host

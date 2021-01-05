@@ -146,7 +146,7 @@
   lineinfile:
     path: /etc/default/jenkins
     regexp: '^JENKINS_HOME'
-    line: 'JENKINS_HOME=/home/server0/configuration/Jenkins'
+    line: 'JENKINS_HOME=/opt/configuration/Jenkins'
 
 - name: Rights of some Jenkins dirs
   file: path={{ item }} owner=server0 group=server0 recurse=true state=directory
