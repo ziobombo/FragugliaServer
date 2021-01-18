@@ -88,7 +88,7 @@
             - GUID=20000
             - TZ=Europe/Paris
             - URL=fraguglia.it
-            - SUBDOMAINS=anon,bitwarden,deluge,gotify,grafana,jackett,jenkins,plex,radarr,sonarr,photos,metrics,
+            - SUBDOMAINS=anon,bitwarden,deluge,gotify,grafana,jackett,jenkins,plex,radarr,sonarr,metrics,
             - VALIDATION=http
             - EMAIL=riccardo.casazza@gmail.com
             - DHLEVEL=2048

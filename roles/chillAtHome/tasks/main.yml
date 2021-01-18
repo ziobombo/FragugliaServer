@@ -1,5 +1,15 @@
 ---
 
+- name: Base packages
+  apt:
+    name:
+      - 'rclone'
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
 - name: Create plex transcode scratch dir
   file: path={{ item }} owner=server0 group=server0 recurse=true state=directory
   with_items:
@@ -133,19 +143,6 @@
           volumes:
             - /home/server0/configuration/MariaDB:/config
           network_mode: host
-          restart: always
-        piwigo:
-          image: linuxserver/piwigo
-          container_name: piwigo
-          environment:
-            - PUID=20000
-            - PGID=20000
-            - TZ=Europe/Paris
-          volumes:
-            - /home/server0/configuration/Piwigo:/config
-            - /home/photos/Gallery:/config/www/gallery/galleries
-          ports:
-            - 10080:80
           restart: always
 
 
