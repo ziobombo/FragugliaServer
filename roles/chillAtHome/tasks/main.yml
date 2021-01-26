@@ -78,6 +78,7 @@
             - /opt/configuration/Sonarr:/config
             - /home/backup/Sonarr:/backup
             - /home/plex/tvshows:/tv
+            - /home/plex/animeshows:/animeshows
             - /home/server0/temp/t_downloads:/downloads
           network_mode: host
           restart: always
