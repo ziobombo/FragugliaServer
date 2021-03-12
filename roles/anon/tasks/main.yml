@@ -134,7 +134,7 @@
           container_name: influxdb
           network_mode: host
           volumes:
-            - /home/server0/configuration/InfluxDB:/var/lib/influxdb
+            - /home/server0/configuration/InfluxDB:/var/lib/influxdb2
           restart:
             always
           user: 
