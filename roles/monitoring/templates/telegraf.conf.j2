@@ -13,8 +13,9 @@
   logfile = "/var/log/telegraf/telegraf.log"
 [[outputs.influxdb]]
   urls = ["https://metrics.fraguglia.it"]
-  username = "server0"
-  password = "{{server0_password}}"
+  token = "{{server0_token}}"
+  organization = "fraguglia.it"
+  bucket = "base"
 [[inputs.cpu]]
   percpu = false
   totalcpu = true
@@ -45,9 +46,4 @@
   interval = "60s"
   servers = ["127.0.0.53"]
   domains = ["www.google.com"]
-{% endif %}
-{% if influxdb_has_docker == true %}
-[[inputs.docker]]
-  interval = "5m"
-  endpoint = "unix:///var/run/docker.sock"
 {% endif %}
