@@ -11,7 +11,7 @@
   hostname = "{{influxdb_hostname}}"
   omit_hostname = false
   logfile = "/var/log/telegraf/telegraf.log"
-[[outputs.influxdb]]
+[[outputs.influxdb_v2]]
   urls = ["https://metrics.fraguglia.it"]
   token = "{{server0_token}}"
   organization = "fraguglia.it"
