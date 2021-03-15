@@ -6,7 +6,6 @@
   vars: 
     influxdb_hostname: server0
     influxdb_internet_connection: true
-    influxdb_has_docker: false
 
   roles:
     - base

@@ -6,7 +6,6 @@
   vars: 
     influxdb_hostname: monolite
     influxdb_internet_connection: false
-    influxdb_has_docker: false
 
   roles:
     - base

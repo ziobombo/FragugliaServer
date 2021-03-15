@@ -5,7 +5,6 @@
   vars: 
     influxdb_hostname: 'cubo'
     influxdb_internet_connection: true
-    influxdb_has_docker: false
 
   roles:
     - base
