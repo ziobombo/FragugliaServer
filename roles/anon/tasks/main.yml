@@ -203,6 +203,12 @@
     group: root
     mode: '0644'
 
+- name: Restart service shorewall, in all cases
+  service:
+    name: shorewall
+    state: restarted
+    enabled: no
+
 - name: Restart service privoxy, in all cases
   service:
     name: privoxy
@@ -212,12 +218,6 @@
   until: task_result is success
   retries: 10
   delay: 2
-
-- name: Restart service shorewall, in all cases
-  service:
-    name: shorewall
-    state: restarted
-    enabled: no
 
 - name: Allow 'server0' user some sudo rights...
   lineinfile:
