@@ -1,0 +1,11 @@
+---
+- hosts: sottiletta
+  remote_user: root
+  become: true
+  become_method: sudo
+  vars: 
+    influxdb_hostname: sottiletta
+    influxdb_internet_connection: false
+
+  roles:
+    - monitoring
