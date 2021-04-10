@@ -34,6 +34,7 @@
           volumes:
             - /home/server0/configuration/Deluge:/config
             - /home/server0/temp/t_downloads:/downloads
+            - /mount/server0/temp/ja_downloads:/blackhole
             - /home/plex:/downloads/movies
             - /opt/deluge_incomplete:/downloads/incomplete
           network_mode: host
