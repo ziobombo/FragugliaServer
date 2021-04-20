@@ -5,7 +5,6 @@
   become_method: sudo
   vars: 
     influxdb_hostname: server0
-    influxdb_internet_connection: true
 
   roles:
     - base

@@ -4,7 +4,6 @@
   become_method: sudo
   vars: 
     influxdb_hostname: 'cubo'
-    influxdb_internet_connection: true
 
   roles:
     - base

@@ -36,12 +36,6 @@
   interval = "60s"
   urls = ["8.8.8.8"]
   method = "exec"
-[[inputs.exec]]
-  interval = "3600s"
-  commands = ["/usr/bin/speedtest-cli --json"]
-  timeout = "60s"
-  data_format = "json"
-  name_suffix = "_speedtest"
 [[inputs.dns_query]]
   interval = "60s"
   servers = ["127.0.0.53"]

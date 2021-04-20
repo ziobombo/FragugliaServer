@@ -5,7 +5,6 @@
   become_method: sudo
   vars: 
     influxdb_hostname: monolite
-    influxdb_internet_connection: false
 
   roles:
     - base
