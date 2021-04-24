@@ -31,13 +31,3 @@
 [[inputs.mem]]
 [[inputs.swap]]
 [[inputs.system]]
-{% if influxdb_internet_connection == true %}
-[[inputs.ping]]
-  interval = "60s"
-  urls = ["8.8.8.8"]
-  method = "exec"
-[[inputs.dns_query]]
-  interval = "60s"
-  servers = ["127.0.0.53"]
-  domains = ["www.google.com"]
-{% endif %}
