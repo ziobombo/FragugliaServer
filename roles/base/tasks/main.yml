@@ -31,6 +31,25 @@
   retries: 10
   delay: 2
 
+- name: Ensure .config/htop exists
+  file:
+    path: /root/.config/htop
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Ensure .config/htop exists for users
+  file:
+    path: /root/.config/htop
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0700'
+  with_items:
+    - server0
+    - riccardo
+
 - name: htop conf
   template:
     src: htoprc.j2
