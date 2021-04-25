@@ -1,16 +1,22 @@
-- name: Ensure group "server0" exists
+- name: Ensure groups exist
   group:
-    name: server0
+    name: {{ item.name }}
     state: present
-    gid: 20000
+    gid: {{ item.id }}
+  with_items:
+    - { name: server0, id: 20000 }
+    - { name: riccardo, id: 20001 }
 
-- name: Ensure user "server0" exists
+- name: Ensure users exist
   user:
-    name: server0
-    uid: 20000
-    group: server0
-    home: /home/server0
+    name: {{ item.name }}
+    uid: {{ item.id }}
+    group: {{ item.group }}
+    home: /home/{{ item.name }}
     shell: /bin/bash
+  with_items:
+    - { name: server0, id: 20000, group: server0 }
+    - { name: riccardo, id: 20001, group: riccardo }
 
 - name: Base packages
   apt:
