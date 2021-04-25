@@ -43,8 +43,8 @@
   template:
     src: htoprc.j2
     dest: /home/{{ item.user }}/.config/htop/htoprc
-    owner: {{ item }}
-    group: {{ item }}
+    owner: "{{ item }}"
+    group: "{{ item }}"
     mode: '0644'
   with_items:
     - server0
