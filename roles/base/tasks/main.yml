@@ -37,6 +37,7 @@
     state: directory
     owner: root
     group: root
+    recurse: yes
     mode: '0700'
 
 - name: Ensure .config/htop exists for users
@@ -45,6 +46,7 @@
     state: directory
     owner: "{{ item }}"
     group: "{{ item }}"
+    recurse: yes
     mode: '0700'
   with_items:
     - server0
