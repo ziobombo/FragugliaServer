@@ -30,3 +30,22 @@
   until: task_result is success
   retries: 10
   delay: 2
+
+- name: htop conf
+  template:
+    src: htoprc.j2
+    dest: /root/.config/htop/htoprc
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: htop conf for users
+  template:
+    src: htoprc.j2
+    dest: /home/{{ item.user }}/.config/htop/htoprc
+    owner: {{ item }}
+    group: {{ item }}
+    mode: '0644'
+  with_items:
+    - server0
+    - riccardo
