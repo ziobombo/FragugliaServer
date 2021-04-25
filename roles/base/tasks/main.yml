@@ -42,7 +42,7 @@
 
 - name: Ensure .config/htop exists for users
   file:
-    path: /root/.config/htop
+    path: /home/{{ item }}/.config/htop
     state: directory
     owner: "{{ item }}"
     group: "{{ item }}"
