@@ -8,4 +8,5 @@
 
   roles:
     - base
+    - desktop
     - monitoring

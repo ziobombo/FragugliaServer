@@ -2,7 +2,7 @@
   group:
     name: "{{ item.name }}"
     state: present
-    gid: {{ item.id }}
+    gid: "{{ item.id }}"
   with_items:
     - { name: server0, id: 20000 }
     - { name: riccardo, id: 20001 }
@@ -10,7 +10,7 @@
 - name: Ensure users exist
   user:
     name: "{{ item.name }}"
-    uid: {{ item.id }}
+    uid: "{{ item.id }}"
     group: "{{ item.group }}"
     home: /home/{{ item.name }}
     shell: /bin/bash
