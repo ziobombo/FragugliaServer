@@ -1,6 +1,6 @@
 - name: Ensure groups exist
   group:
-    name: {{ item.name }}
+    name: "{{ item.name }}"
     state: present
     gid: {{ item.id }}
   with_items:
@@ -9,9 +9,9 @@
 
 - name: Ensure users exist
   user:
-    name: {{ item.name }}
+    name: "{{ item.name }}"
     uid: {{ item.id }}
-    group: {{ item.group }}
+    group: "{{ item.group }}"
     home: /home/{{ item.name }}
     shell: /bin/bash
   with_items:
