@@ -61,7 +61,7 @@
 - name: htop conf for users
   template:
     src: htoprc.j2
-    dest: /home/{{ item.user }}/.config/htop/htoprc
+    dest: /home/{{ item }}/.config/htop/htoprc
     owner: "{{ item }}"
     group: "{{ item }}"
     mode: '0644'
