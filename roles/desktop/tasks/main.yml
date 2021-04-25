@@ -1,0 +1,24 @@
+- name: Apt keys
+  apt_key: url={{ item }} state=present
+  with_items:
+    - https://brave-browser-apt-release.s3.brave.com/brave-core.asc
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com hirsute main
+
+- name: Base packages
+  apt:
+    name:
+      - 'brave-browser'
+      - 'brave-keyring'
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
