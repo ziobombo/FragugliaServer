@@ -1,0 +1,22 @@
+- name: Base packages
+  apt:
+    name:
+      - 'nfs-common'
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Base nfs mount
+  file: path={{ item }} owner=server0 group=server0 recurse=true state=directory
+  with_items:
+    - /nfs/home
+
+- name: Mount nfs homes
+  ansible.posix.mount:
+    src: cubo:/home
+    path: /nfs/home
+    state: mounted
+    fstype: nfs
+
