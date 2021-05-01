@@ -1,3 +1,12 @@
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
 - name: Ensure groups exist
   group:
     name: "{{ item.name }}"
@@ -21,7 +30,6 @@
 - name: Base packages
   apt:
     name:
-      - 'openjdk-11-jdk-headless'
       - 'sysfsutils'
       - 'htop'
     update_cache: yes

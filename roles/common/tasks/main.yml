@@ -1,12 +1,3 @@
-- name: Update all packages to the latest version
-  apt:
-    upgrade: dist
-    update_cache: yes
-  register: task_result
-  until: task_result is success
-  retries: 10
-  delay: 2
-
 - name: Unwanted packages
   apt:
     state: absent
