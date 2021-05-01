@@ -44,7 +44,6 @@
       - 'software-properties-common'
       - 'docker-ce'
       - 'htop'
-      - 'iperf3'
       - 'python3-pip'
       - 'maven'
       - 'python-passlib'
@@ -54,7 +53,7 @@
       - 'zfs-zed'
       - 'zfsutils-linux'
       - 'zfs-auto-snapshot'
-      - 'fail2ban'
+      - 'nfs-kernel-server'
     update_cache: yes
   register: task_result
   until: task_result is success
@@ -160,17 +159,9 @@
     name: jenkins
     state: started
 
-- name: iperf systemd conf
-  template:
-    src: iperf.service.j2
-    dest: /etc/systemd/system/iperf.service
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: iperf systemd
-  systemd:
-    name: iperf
-    enabled: yes
-    masked: no
-    state: restarted
+- name: nfs server
+  import_role:
+    name: geerlingguy.nfs
+  vars:
+    nfs_exports: [ "/home *(rw,sync,no_root_squash,no_subtree_check)" ]
+    

@@ -8,5 +8,6 @@
 
   roles:
     - base
+    - nfs_client
     - desktop
     - monitoring
