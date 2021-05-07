@@ -29,3 +29,8 @@
     - deconz-init
     - deconz-update
     - deconz-wifi
+
+- name: Other stopped
+  service: name={{ item }} state=stopped enabled=no
+  with_items:
+    - deconz-gui
