@@ -1,0 +1,23 @@
+- name: Apt keys
+  apt_key: url={{ item }} state=present
+  with_items:
+    - https://downloads.plex.tv/plex-keys/PlexSign.key
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+- name: Apt repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - deb https://downloads.plex.tv/repo/deb public main
+
+- name: Plex
+  apt:
+    name:
+      - 'plexmediaserver'
+    update_cache: yes
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
