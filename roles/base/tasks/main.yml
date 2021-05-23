@@ -22,10 +22,11 @@
     uid: "{{ item.id }}"
     group: "{{ item.group }}"
     home: /home/{{ item.name }}
+    groups: "{{ item.groups }}"
     shell: /bin/bash
   with_items:
     - { name: server0, id: 20000, group: server0 }
-    - { name: riccardo, id: 20001, group: riccardo }
+    - { name: riccardo, id: 20001, group: riccardo, groups: server0 }
 
 - name: Base packages
   apt:
