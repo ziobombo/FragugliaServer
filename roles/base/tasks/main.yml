@@ -25,7 +25,7 @@
     groups: "{{ item.groups }}"
     shell: /bin/bash
   with_items:
-    - { name: server0, id: 20000, group: server0 }
+    - { name: server0, id: 20000, group: server0, groups: server0 }
     - { name: riccardo, id: 20001, group: riccardo, groups: server0 }
 
 - name: Base packages
