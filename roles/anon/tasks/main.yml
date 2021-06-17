@@ -2,6 +2,7 @@
   apt_key: url={{ item }} state=present
   with_items:
     - https://download.docker.com/linux/ubuntu/gpg
+    - https://as-repository.openvpn.net/as-repo-public.gpg
   register: task_result
   until: task_result is success
   retries: 10
@@ -11,6 +12,7 @@
   apt_repository: repo={{ item }} state=present
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+    - deb http://as-repository.openvpn.net/as/debian focal main
     - ppa:webupd8team/java
 
 - name: Update all packages to the latest version
@@ -46,6 +48,11 @@
       - 'python-pip'
       - 'python-passlib'
       - 'shorewall'
+      - 'ca-certificates'
+      - 'wget'
+      - 'net-tools' 
+      - 'gnupg'
+      - 'openvpn-as'
     update_cache: yes
   register: task_result
   until: task_result is success
@@ -107,20 +114,6 @@
           network_mode: bridge
           volumes:
             - /home/server0/configuration/BitWarden:/data:rw
-        openvpn-as:
-          image: linuxserver/openvpn-as
-          container_name: openvpn-as
-          cap_add:
-            - NET_ADMIN
-          environment:
-            - PUID=20000
-            - PGID=20000
-            - TZ=Europe/Paris
-            - INTERFACE=ens3
-          volumes:
-            - /home/server0/configuration/OpenVPN-AS:/config
-          network_mode: host
-          restart: always
         gotify:
           image: gotify/server
           container_name: gotify
@@ -184,6 +177,7 @@
         - { action: ACCEPT, source: all, dest: "$FW", proto: "udp", dest_port: 1194 }
         - { action: ACCEPT, source: all, dest: "$FW", proto: "udp", dest_port: 22124 }
         - { action: ACCEPT, source: net, dest: "$FW", proto: icmp, dest_port: echo-request }
+        - { action: ACCEPT, source: all, dest: "$FW", proto: "udp", dest_port: 51820 }
     shorewall_zones:
       - { zone: fw, type: firewall }
       - { zone: net, type: ipv4 }
