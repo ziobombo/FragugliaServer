@@ -12,7 +12,7 @@
   apt_repository: repo={{ item }} state=present
   with_items:
     - deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
-    - deb http://as-repository.openvpn.net/as/debian focal main
+    - deb http://as-repository.openvpn.net/as/debian bionic main
     - ppa:webupd8team/java
 
 - name: Update all packages to the latest version
